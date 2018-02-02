@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="feedback_email" translatable="false">carcmedev@gmail.com</string>
+    <string name="website" translatable="false">https://carcmedev.github.io/btown/index.html</string>
+    <string name="bugtracker" translatable="false">https://github.com/carcme/btown_mvp/issues</string>
+    <string name="carc_app_base_url" formatted="false">https://play.google.com/store/apps/details?id=me.carc.%s</string>
+
+    <string name="visit_website">Website</string>
+
+    <string name="about_top">Marc Bampton 2018 ©\nFree Software License: GPLv3</string>
+
+    <string name="about"><![CDATA[
+<p>This timer is the result of many searches to find an interval timer with certain features. None of the other times had all the features I wanted
+or were too complex and did too much! So I decided to create my own and use it to learn a bit more about Android along the way.</p>
+<p>If you have any features you\'d like to see, let me know via the feedback button</p>
+]]></string>
+
+    <string name="about_bottom">
+    <![CDATA[
+<p>If you find any issues with the app, please report them at <a href="%2$s">the issue tracker</a>.</p>
+]]>
+</string>
+
+
+
+
+
+</resources>

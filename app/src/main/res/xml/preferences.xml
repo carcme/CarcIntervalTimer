@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Timer Settings">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prep_time_key"
+            android:summary="@string/prep_time_summary"
+            android:title="@string/prep_time_title"/>
+
+        <me.carc.intervaltimer.widgets.PickerPrefDialog
+            android:defaultValue="@string/default_work_time_value"
+            android:key="round_time_key"
+            android:title="@string/round_time_title"/>
+
+        <me.carc.intervaltimer.widgets.PickerPrefDialog
+            android:defaultValue="@string/default_rest_time_value"
+            android:key="rest_time_key"
+            android:title="@string/rest_time_title"/>
+
+        <ListPreference
+            android:defaultValue="@string/warn_time_values_default"
+            android:entries="@array/warn_time"
+            android:entryValues="@array/warn_time_values"
+            android:key="warn_time_key"
+            android:summary="@string/warn_time_summary"
+            android:title="@string/warn_time_title"/>
+
+        <EditTextPreference
+            android:defaultValue="9"
+            android:key="number_rounds_key"
+            android:numeric="integer"
+            android:title="@string/num_round_title"
+            android:summary="@string/num_round_summary"/>
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="quotes_key"
+            android:summary="@string/quotes_summary"
+            android:title="@string/quotes_title"/>
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="history_key"
+            android:summary="@string/history_summary"
+            android:title="@string/history_title"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Phone Settings">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="keep_awake_key"
+            android:summary="@string/keep_awake_summary"
+            android:title="@string/keep_awake_title"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="proximity_sensor_key"
+            android:summary="@string/proximity_sensor_summary_disabled"
+            android:title="@string/proximity_sensor_title"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="mute_key"
+            android:summary="@string/mute_summary"
+            android:title="@string/mute_title"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="use_vibrate_key"
+            android:summary="@string/use_vibrate_summary_disabled"
+            android:title="@string/use_vibrate_title"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Others">
+
+        <Preference
+            android:key="report_bug"
+            android:summary="Log an error report on Github"
+            android:title="Send Bug to Developer"/>
+
+        <Preference
+            android:key="version"
+            android:title="Version 0.1.1-beta"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

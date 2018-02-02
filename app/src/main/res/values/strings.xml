@@ -1,0 +1,113 @@
+<resources>
+    <string name="app_name">Carc Interval Timer</string>
+    <string name="app_settings_name">Settings</string>
+
+    <string name="time_set">Set time</string>
+    <string name="time">Time : </string>
+
+    <string name="initial_time">00:00</string>
+    <string name="action_settings">Settings</string>
+    <string name="round">ROUND</string>
+    <string name="round_number">1/12</string>
+    <string name="work">Work: %s</string>
+    <string name="rest">Rest: %s</string>
+
+    <string name="set">Set</string>
+    <string name="cancel">Cancel</string>
+    <string name="round_time_title">Exercise Duration</string>
+    <string name="rest_time_title">Rest Duration</string>
+    <string name="keep_awake_title">Keep Awake</string>
+    <string name="num_round_title">Number of Sets</string>
+    <string name="num_round_summary">%s sets</string>
+    <string name="keep_awake_summary">Keep screen awake</string>
+    <string name="keep_awake_summary_disbled">The screen will go to standby mode</string>
+    <string name="proximity_sensor_title">Proximity Sensor</string>
+    <string name="proximity_sensor_summary">Start/Stop with proximity sensor. Disable if you put device in pocket</string>
+    <string name="proximity_sensor_summary_disabled">The proximity sensor is disabled</string>
+    <string name="use_vibrate_title">Device Vibration</string>
+    <string name="use_vibrate_summary">Vibrate the device with alarms</string>
+    <string name="use_vibrate_summary_disabled">Device vibrator is disabled</string>
+
+    <string name="warn_time_title">Warning Time</string>
+    <string name="warn_time_summary">Alert sound %s before round finishes</string>
+    <string name="warn_time_no_warning">No Warnings</string>
+
+    <string name="stop_toast">Please stop timer first</string>
+    <string name="prep_time_title">Preparation Time</string>
+    <string name="prep_time_summary">Add 5 seconds prep before timer starts</string>
+    <string name="prep_time_summary_disabled">Time will start immediately</string>
+    <string name="mute_title">Mute Sounds</string>
+    <string name="mute_summary">Sounds are enabled</string>
+    <string name="mute_summary_disabled">No sounds will be played</string>
+    <string name="default_rest_time_value">1:00</string>
+    <string name="default_work_time_value">1:00</string>
+    <string name="hold_to_reset">Hold to reset</string>
+
+    <string name="quotes_title">Show Quotes</string>
+    <string name="quotes_summary">Display motivational quotes during workout</string>
+    <string name="quotes_summary_disabled">Current activity is dislayed</string>
+
+    <string name="history_title">Show History</string>
+    <string name="history_summary">Workout history is shown on the main screen</string>
+    <string name="history_summary_disabled">No workout history is shown</string>
+
+    <string name="workDefaultMsg">Work It</string>
+    <string name="restDefaultMsg">Rest</string>
+    <string name="prepDefaultMsg">Get Ready</string>
+
+
+
+    <string name="shared_string_about">About</string>
+    <string name="shared_string_extra">Extra</string>
+    <string name="tab_libraries">Libs</string>
+    <string name="shared_string_feedback">Feedback</string>
+    <string name="shared_string_rate">Rate</string>
+    <string name="shared_string_settings">Settings</string>
+    <string name="shared_string_share">Share</string>
+
+
+
+    <string name="appTitleBtown">B-Town | Berlin Tours and Maps</string>
+    <string name="appDescBtown">The ultimate Berlin guide.\nExplore Berlin better with B-Town!</string>
+
+    <string name="appTitleAGD">Any Given Date | Event Counter</string>
+    <string name="appDescAGB">Never miss another birthday, valentines, dinner date or meeting. Keep track of how long until your next holiday, birthday or anniversary.</string>
+
+    <string name="appTitleBlackBooks">BlackBooks Stories</string>
+    <string name="appDescBlackBooks">Brain puzzles to play with friends.\nFind the situation behind the short story with just yes and no answers</string>
+
+    <string name="appTitleFakeCall">Fake Call and SMS</string>
+    <string name="appDescFakeCall">An excuse at your fingertips. No adverts and completely free</string>
+
+
+    <string name="history_item_rounds" formatted="false">Rounds: %d / %d</string>
+    <string name="history_item_times" formatted="false">Times: %s / %s</string>
+    <string name="history_item_elasped_time" formatted="false">Total Time: %s</string>
+    <string name="history_item_date" formatted="false">When: %s</string>
+    <string name="added_to_database">Workout added to database</string>
+
+
+
+    <!--FEEDBACK DIALOG-->
+    <string name="rating_dialog_experience">How was your experience with us?</string>
+    <string name="rating_dialog_maybe_later">Maybe later</string>
+    <string name="rating_dialog_never">Never</string>
+    <string name="rating_dialog_feedback_title">Feedback</string>
+    <string name="rating_dialog_submit">Submit</string>
+    <string name="rating_dialog_cancel">Cancel</string>
+    <string name="rating_dialog_suggestions">Suggest what you want and we\'ll work on it!</string>
+
+    <string name="ratings_request_title">Love to know what you think of the app</string>
+    <string name="feedback_request_title">Send Feedback</string>
+    <string name="feedback_request_hint">Tell us where we can improve&#8230;</string>
+    <string name="feedbackChooserTitle">Send Feedback Via</string>
+    <string name="add_your_comment">Add comment</string>
+
+    <string name="shared_string_send">Send</string>
+    <string name="shared_string_thankyou">Thank you!</string>
+
+    <string name="error_playstore_not_found">Couldn\'t find PlayStore on this device</string>
+    <string name="shared_string_error">"Error!"</string>
+    <string name="carc_image">Play Store image for application</string>
+
+</resources>

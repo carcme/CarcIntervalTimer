@@ -1,0 +1,95 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
+    defaultConfig {
+        applicationId "me.carc.carcintervaltimer"
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode="1"
+        versionName="0.0.1-beta"
+        vectorDrawables.useSupportLibrary = true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+    buildTypes {
+        debug {
+        }
+        release {
+            minifyEnabled true
+            shrinkResources false
+            zipAlignEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+    }
+}
+ext {
+    SUPPORT_LIBRARY_VERSION = '26.0.2'
+    constraintLayoutVersion = '1.0.2'
+
+    BUTTERKNIFE_VERSION = '8.4.0'
+    DAGGER_VERSION = '2.5'
+    RXJAVA = '2.1.8'
+    RXANDROID = '2.0.1'
+    RXLIFECYCLE = '2.2.1'
+    RXPERMISSIONS = '0.9.5@aar'
+
+    ROOMVERSION= '1.0.0-alpha7'
+
+    leakcanary = '1.5.4'
+    robolectric = '3.5.1'
+    mockito = '2.12.0'
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:support-v13:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:cardview-v7:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:support-vector-drawable:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:animated-vector-drawable:$SUPPORT_LIBRARY_VERSION"
+
+    compile "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
+
+
+    compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
+
+    compile "com.trello.rxlifecycle2:rxlifecycle:$RXLIFECYCLE"
+    compile "com.trello.rxlifecycle2:rxlifecycle-android:$RXLIFECYCLE"
+    compile "com.trello.rxlifecycle2:rxlifecycle-components:$RXLIFECYCLE"
+
+    compile "com.tbruyelle.rxpermissions2:rxpermissions:$RXPERMISSIONS"
+
+    compile "android.arch.persistence.room:runtime:$ROOMVERSION"
+    annotationProcessor "android.arch.persistence.room:compiler:$ROOMVERSION"
+
+    // DAGGER
+    def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
+    compile  "com.google.dagger:dagger:$DAGGER_VERSION"
+    provided 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
+    annotationProcessor daggerCompiler
+    testAnnotationProcessor daggerCompiler
+    androidTestAnnotationProcessor daggerCompiler
+
+
+    compile 'com.mikepenz:iconics-core:2.9.3@aar'
+    compile('com.mikepenz:aboutlibraries:5.9.8@aar') {
+        transitive = true
+    }
+    compile 'com.mikepenz:fastadapter:2.6.3@aar'
+
+    testCompile 'junit:junit:4.12'
+}

@@ -1,0 +1,161 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/black"
+    tools:context=".ui.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/timerBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="?attr/actionBarSize">
+
+
+        <LinearLayout
+            android:id="@+id/round_panel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
+            android:padding="6dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/round"
+                android:textSize="24sp"
+                />
+
+            <TextView
+                android:id="@+id/round_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="24sp"
+                tools:text="12/12"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/margin_standard"
+            android:paddingStart="@dimen/margin_standard">
+            <!-- TODO Change Font Family for app -->
+            <TextView
+                android:id="@+id/workPreviewText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="Work: 88:88"/>
+
+            <TextView
+                android:id="@+id/restPreviewText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Rest: 00:33"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/time_panel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/round_panel"
+            android:layout_marginBottom="@dimen/fab_space"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:background="@android:color/transparent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/elapsedTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|end"
+                android:textSize="20sp"
+                tools:text="Elapsed Time:"/>
+
+            <TextView
+                android:id="@+id/time_left_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/initial_time"
+                android:textColor="#000000"
+                android:textSize="120sp"
+                tools:textColor="#FFF"/>
+
+            <TextView
+                android:id="@+id/timerMessage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:textSize="30sp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:visibility="visible"
+                tools:text="It’s not the will to win that matters, everyone has that. It’s the will to prepare to win that matters"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                tools:visibility="gone"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/resetLayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:src="@drawable/background_tint"/>
+
+        <Button
+            android:id="@+id/resetBtn"
+            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:background="@drawable/solid_button_background"
+            android:paddingEnd="@dimen/margin_double"
+            android:paddingStart="@dimen/margin_double"
+            android:text="@string/hold_to_reset"/>
+
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_settings"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:elevation="4dp"
+        android:tint="@color/colorAccent"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@android:drawable/ic_media_play"/>
+
+</android.support.design.widget.CoordinatorLayout>
