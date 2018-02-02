@@ -99,7 +99,7 @@
 
     <string name="ratings_request_title">Love to know what you think of the app</string>
     <string name="feedback_request_title">Send Feedback</string>
-    <string name="feedback_request_hint">Tell us where we can improve&#8230;</string>
+    <string name="feedback_request_hint">Tell us where I can improve&#8230; or some features you\'d like to see</string>
     <string name="feedbackChooserTitle">Send Feedback Via</string>
     <string name="add_your_comment">Add comment</string>
 
@@ -109,5 +109,6 @@
     <string name="error_playstore_not_found">Couldn\'t find PlayStore on this device</string>
     <string name="shared_string_error">"Error!"</string>
     <string name="carc_image">Play Store image for application</string>
+    <string name="website_todo">I haven\'t built the site yet</string>
 
 </resources>

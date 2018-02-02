@@ -71,7 +71,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        setContentView(R.layout.rating_dialog);
+        setContentView(R.layout.dialog_rating);
 
         tvTitle = findViewById(R.id.dialog_rating_title);
         tvNegative = findViewById(R.id.dialog_rating_button_negative);
@@ -420,22 +420,22 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             return this;
         }
 
-        public Builder positiveButtonTextColor(int positiveTextColor) {
+        public Builder positiveBtnTextColor(int positiveTextColor) {
             this.positiveTextColor = positiveTextColor;
             return this;
         }
 
-        public Builder negativeButtonTextColor(int negativeTextColor) {
+        public Builder negativeBtnTextColor(int negativeTextColor) {
             this.negativeTextColor = negativeTextColor;
             return this;
         }
 
-        public Builder positiveButtonBackgroundColor(int positiveBackgroundColor) {
+        public Builder positiveBtnBackgroundColor(int positiveBackgroundColor) {
             this.positiveBackgroundColor = positiveBackgroundColor;
             return this;
         }
 
-        public Builder negativeButtonBackgroundColor(int negativeBackgroundColor) {
+        public Builder negativeBtnBackgroundColor(int negativeBackgroundColor) {
             this.negativeBackgroundColor = negativeBackgroundColor;
             return this;
         }

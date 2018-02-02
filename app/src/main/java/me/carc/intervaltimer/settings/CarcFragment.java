@@ -28,7 +28,7 @@ public class CarcFragment extends Fragment {
     private static final String TAG = CarcFragment.class.getName();
     public static final String TAG_ID = "CarcFragment";
 
-    private final static String MARKET_REF = "&referrer=utm_source%3Dme.carc.fakecallandsms_mvp";
+    private final static String MARKET_REF = "&referrer=utm_source%3Dme.carc.carcintervaltimer";
 
     public interface ClickListener {
         void onClick(CarcAppsMenu item);

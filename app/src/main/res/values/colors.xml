@@ -33,5 +33,7 @@
     <color name="negativeBtnBgColor">@color/white</color>
     <color name="positiveBtnTextColor">#669900</color>
     <color name="negativeBtnTextColor">#C00</color>
+    <color name="negativeBtnTextColorPale">#999</color>
+
 
 </resources>

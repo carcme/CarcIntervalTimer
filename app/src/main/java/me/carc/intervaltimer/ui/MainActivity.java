@@ -424,10 +424,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         recyclerView.setLayoutManager(mLayoutManager);
 
         loadDatabase();
-
-        if(Preferences.isFirstRun(this)) {
-            buildDummmyDatabaseEntry();
-        }
     }
 
 
@@ -453,16 +449,6 @@ public class MainActivity extends Activity implements SensorEventListener {
                     }
                 });
         dlg.show();
-    }
-
-    private HistoryItem buildDummmyDatabaseEntry() {
-        String date = "Hold to Delete Entry";
-        String elaspedTime = "Test Data";
-        int roundsCompleted = 0;
-        int roundsTotal = 0;
-        String workTime = "03:00";
-        String restTime = "01:00";
-        return new HistoryItem(1, date, elaspedTime, roundsCompleted, roundsTotal, workTime, restTime);
     }
 
     @Override

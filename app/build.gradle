@@ -7,8 +7,8 @@ android {
         applicationId "me.carc.carcintervaltimer"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode="1"
-        versionName="0.0.1-beta"
+        versionCode="2"
+        versionName="0.0.2-beta"
         vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
             annotationProcessorOptions {
@@ -21,7 +21,7 @@ android {
         }
         release {
             minifyEnabled true
-            shrinkResources false
+            shrinkResources true
             zipAlignEnabled true
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -67,11 +67,12 @@ dependencies {
     compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
     annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
 
+/*
     compile "com.trello.rxlifecycle2:rxlifecycle:$RXLIFECYCLE"
     compile "com.trello.rxlifecycle2:rxlifecycle-android:$RXLIFECYCLE"
     compile "com.trello.rxlifecycle2:rxlifecycle-components:$RXLIFECYCLE"
-
     compile "com.tbruyelle.rxpermissions2:rxpermissions:$RXPERMISSIONS"
+*/
 
     compile "android.arch.persistence.room:runtime:$ROOMVERSION"
     annotationProcessor "android.arch.persistence.room:compiler:$ROOMVERSION"

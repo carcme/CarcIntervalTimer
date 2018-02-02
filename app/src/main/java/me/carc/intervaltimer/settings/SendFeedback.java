@@ -24,8 +24,6 @@ public class SendFeedback {
     public static final int TYPE_FEEDBACK = 0;
     public static final int TYPE_RATE = 1;
 
-    public static final String FIREBASE_MSG_BOARD_FEEDBACK = "FEEDBACK";
-
 
     public SendFeedback(Context ctx, int type) {
         if(type == TYPE_FEEDBACK) {
@@ -63,7 +61,6 @@ public class SendFeedback {
         builder.build().show();
     }
 
-
     private void rate(final Context ctx) {
         final RatingDialog ratingDialog = new RatingDialog.Builder(ctx)
                 .icon(ContextCompat.getDrawable(ctx, R.mipmap.ic_launcher))
@@ -75,12 +72,11 @@ public class SendFeedback {
                 .formSubmitText(ctx.getString(R.string.rating_dialog_submit))
                 .formCancelText(ctx.getString(R.string.rating_dialog_cancel))
                 .ratingBarColor(R.color.colorAccent)
+                .positiveBtnTextColor(R.color.positiveBtnTextColor)
+                .positiveBtnBackgroundColor(R.drawable.button_selector_positive)
 
-                .positiveButtonTextColor(R.color.colorAccent)
-                .positiveButtonBackgroundColor(R.drawable.button_selector_positive)
-
-                .negativeButtonTextColor(R.color.colorPrimaryDark)
-                .negativeButtonBackgroundColor(R.drawable.button_selector_negative)
+                .negativeBtnTextColor(R.color.negativeBtnTextColorPale)
+                .negativeBtnBackgroundColor(R.drawable.button_selector_negative)
                 .onThresholdCleared(new RatingDialog.Builder.RatingThresholdClearedListener() {
                     @Override
                     public void onThresholdCleared(RatingDialog dlg, float rating, boolean thresholdCleared) {
@@ -114,7 +110,7 @@ public class SendFeedback {
                 .setType("message/rfc822")
                 .addEmailTo(ctx.getString(R.string.feedback_email))
                 .setSubject(ctx.getString(R.string.app_name))
-                .setText("")
+                .setText(text)
                 //.setHtmlText(body) //If you are using HTML in your body text
                 .setChooserTitle(ctx.getString(R.string.shared_string_feedback))
                 .startChooser();
