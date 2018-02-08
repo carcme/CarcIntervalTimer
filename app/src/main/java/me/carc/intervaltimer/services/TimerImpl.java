@@ -1,0 +1,184 @@
+/*
+ * HIIT Me, a High Intensity Interval Training app for Android
+ * Copyright (C) 2015 Alex Gilleran
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package me.carc.intervaltimer.services;
+
+import android.os.CountDownTimer;
+
+import me.carc.intervaltimer.model.Exercise;
+import me.carc.intervaltimer.model.WorkoutGroup;
+import me.carc.intervaltimer.model.WorkoutItem;
+import me.carc.intervaltimer.services.interfaces.CountDownObserver;
+import me.carc.intervaltimer.services.interfaces.ProgramRunner;
+import me.carc.intervaltimer.utils.PeekaheadQueue;
+
+public class TimerImpl implements ProgramRunner {
+
+	private CountDownTimer countDown;
+
+	private WorkoutGroup program;
+	private PeekaheadQueue<WorkoutItem> nodeQueue;
+	private CountDownObserver observer;
+	private int exerciseMsRemaining;
+	private long programMsRemaining;
+	private boolean running = false;
+	private boolean paused = false;
+	private boolean stopped = false;
+
+	public TimerImpl(WorkoutGroup program, CountDownObserver observer) {
+		this.program = program;
+		this.nodeQueue = program.asQueue();
+		this.observer = observer;
+		this.exerciseMsRemaining = getCurrentExercise().getDuration();
+		this.programMsRemaining = program.getAssociatedNode().getDuration();
+
+		countDown = new ProgramCountDown(programMsRemaining, TICK_RATE);
+	}
+
+	@Override
+	public void start() {
+		running = true;
+		paused = false;
+
+		observer.onStart();
+
+		countDown.start();
+	}
+
+	@Override
+	public void stop() {
+		running = false;
+		stopped = true;
+		paused = false;
+
+		observer.onExerciseStart(getCurrentExercise());
+		observer.onProgramFinish();
+
+		countDown.cancel();
+	}
+
+	@Override
+	public void resume() {
+		running = true;
+		paused = false;
+
+		observer.onResume();
+
+		countDown.start();
+
+	}
+
+	@Override
+	public boolean isRunning() {
+		return running;
+	}
+
+	@Override
+	public boolean isPaused() {
+		return paused;
+	}
+
+	@Override
+	public boolean isStopped() {
+		return stopped;
+	}
+
+	@Override
+	public Exercise getCurrentExercise() {
+		return getCurrentNode().getAttachedExercise();
+	}
+
+	@Override
+	public WorkoutItem getCurrentNode() {
+		return nodeQueue.peek();
+	}
+
+	@Override
+	public WorkoutGroup getProgram() {
+		return program;
+	}
+
+	@Override
+	public Exercise getNextExercise() {
+		WorkoutItem next = nodeQueue.peek(1);
+		return next != null ? next.getAttachedExercise() : null;
+	}
+
+	@Override
+	public void pause() {
+		paused = true;
+		running = false;
+
+
+		countDown.cancel();
+		countDown = new ProgramCountDown(programMsRemaining, TICK_RATE);
+
+		if (observer != null) {
+			observer.onPause();
+		}
+	}
+
+	@Override
+	public long getProgramMsRemaining() {
+		return programMsRemaining;
+	}
+
+	@Override
+	public int getExerciseMsRemaining() {
+		return exerciseMsRemaining;
+	}
+
+	private class ProgramCountDown extends CountDownTimer {
+		public ProgramCountDown(long millisInFuture, long countDownInterval) {
+			super(millisInFuture, countDownInterval);
+		}
+
+		@Override
+		public void onFinish() {
+			running = false;
+			stopped = true;
+			observer.onProgramFinish();
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {
+			// onTick doesn't execute exactly on intervals of the tickRate, it
+			// executes roughly close to the tickRate... so the interval within
+			// ticks needs to be calculated.
+			int msSinceLastTick = (int) (programMsRemaining - millisUntilFinished);
+			programMsRemaining = (int) millisUntilFinished;
+
+			// Remove the ms since last tick from the exercise ms remaining.
+			exerciseMsRemaining -= msSinceLastTick;
+
+			if (exerciseMsRemaining <= 0) {
+				nodeQueue.remove();
+
+				// Adding rather than assigning the next exercise duration means
+				// that any time leftover from the first exercise is subtracted
+				// from the next one.
+				exerciseMsRemaining += getCurrentExercise().getDuration();
+
+				observer.onExerciseStart(getCurrentExercise());
+			}
+
+			observer.onTick(exerciseMsRemaining, millisUntilFinished);
+		}
+	}
+
+}

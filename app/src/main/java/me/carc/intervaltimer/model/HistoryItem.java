@@ -21,6 +21,11 @@ public class HistoryItem {
     @ColumnInfo(name = "date")
     private String date;
 
+    @ColumnInfo(name = "title")
+    private String title;
+
+    @ColumnInfo(name = "timeRemaining")
+    private String timeRemaining;
     @ColumnInfo(name = "elaspedTime")
     private String elaspedTime;
 
@@ -35,9 +40,11 @@ public class HistoryItem {
     private String restTime;
 
 
-    public HistoryItem(int keyID, String date, String elaspedTime, int roundsCompleted, int roundsTotal, String workTime, String restTime) {
+    public HistoryItem(int keyID, String date, String title, String timeRemaining, String elaspedTime, int roundsCompleted, int roundsTotal, String workTime, String restTime) {
         this.keyID = keyID;
         this.date = date;
+        this.title = title;
+        this.timeRemaining = timeRemaining;
         this.elaspedTime = elaspedTime;
         this.roundsCompleted = roundsCompleted;
         this.roundsTotal = roundsTotal;
@@ -45,11 +52,19 @@ public class HistoryItem {
         this.restTime = restTime;
     }
 
+
     public int getKeyID() { return keyID; }
     public void setKeyID(int keyID) { this.keyID = keyID; }
 
     public String getDate() { return date; }
     public void setDate(String dateMilli) { this.date = dateMilli; }
+
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getTimeRemaining() { return timeRemaining; }
+    public void setTimeRemaining(String timeRemaining) { this.timeRemaining = timeRemaining; }
 
     public String getElaspedTime() { return elaspedTime; }
     public void setElaspedTime(String elaspedTime) { this.elaspedTime = elaspedTime; }

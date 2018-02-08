@@ -13,12 +13,12 @@
     <string-array name="warn_time_values">
         <item>0</item>
         <item>3</item>
-        <item>@string/warn_time_values_default</item>
+        <item>5</item>
         <item>7</item>
         <item>10</item>
         <item>15</item>
     </string-array>
-    <string name="warn_time_values_default" translatable="false">5</string>
+    <string name="warn_time_values_default" translatable="false">3</string>
 
 
     <array name="autosize_text_sizes">
@@ -27,6 +27,91 @@
         <item>30sp</item>
         <item>40sp</item>
     </array>
+
+    <string-array name="prepTTS">
+        <item>Get ready</item>
+        <item>Hope you\'ve warmed up</item>
+        <item>Are you ready for this?</item>
+        <item>Lets kick it</item>
+        <item>Lets go for your personal best</item>
+        <item>Time to kick ass and chew bubble gum… and I\'m all outta gum.</item>
+        <item>I will count to three. There will not be a four</item>
+        <item>Come with me if you want to live!</item>
+        <item>I was born ready!</item>
+        <item>Well Hello Mister Fancypants</item>
+        <item>Yippee kai yay, muddy funster</item>
+        <item>Now, young Skywalker, you will die</item>
+
+<!--
+        <item>empty</item>
+        <item>empty</item>
+        <item>empty</item>
+        <item>empty</item>
+        <item>empty</item>
+-->
+
+    </string-array>
+
+    <string-array name="workTTS">
+        <item>It\'s all in the reflexes</item>
+        <item>Yippee kai yay, muddy funster</item>
+        <item>Time to kick ass and chew bubble gum… and I\'m all outta gum.</item>
+        <item>COME GET SOME!!!</item>
+        <item>Do, or do not. There is no try</item>
+        <item>Gonna rip \'em a new one</item>
+        <item>Let\'s rock</item>
+        <item>What are you waiting for? Christmas?</item>
+        <item>Get to the chopper!</item>
+        <item>I love the smell of sweat in the morning</item>
+        <item>Looks like nothing to me</item>
+        <item>It\'s clobberin\' time</item>
+        <item>Run. Or I will taunt you a second time</item>
+        <item>Cocked, locked, and ready to rock</item>
+        <item>Time to go hard or go home</item>
+        <item>Get your arse in gear</item>
+        <item>Work until your lungs pop</item>
+        <item>Go… Go… Go</item>
+        <item>Don’t make excuses. Make results</item>
+        <item>Run Yasmin, run. Run like the wind</item>
+        <item>Time to give 100 percent</item>
+        <item>Muscles…Use them or lose them</item>
+
+    </string-array>
+
+    <string-array name="restTTS">
+        <item>And rest</item>
+        <item>Get your breath back</item>
+        <item>Have a rest and then do it all again</item>
+        <item>Pain is temporary</item>
+        <item>Get back to it, you slacker!</item>
+        <item>Looks like cleanup on aisle four</item>
+        <item>Ooh, that\'s gotta hurt</item>
+        <item>Piece of Cake</item>
+        <item>Sometimes, I even amaze myself</item>
+        <item>Suck it down!</item>
+        <item>That\'s gonna leave a mark</item>
+        <item>Yeah, piece of cake!</item>
+        <item>I make this look good</item>
+        <item>Gimme a Jack and Coke anyday!</item>
+        <item>Just a flesh wound</item>
+        <item>Tis but a scratch</item>
+        <item>Come on you pansy</item>
+        <item>That hurt you more than it hurt me</item>
+        <item>Help me, Obi-Wan Kenobi. You\’re my only hope</item>
+
+    </string-array>
+
+    <string-array name="doneTTS">
+        <item>And you\'re done</item>
+        <item>You\'re finished… well done</item>
+        <item>Congratulation. Shower time!</item>
+        <item>Damn… I\'m looking good!</item>
+        <item>Those that did well, well done. Those that didn\'t… must try harder!</item>
+        <item>Let do get you out of those wet clothes baby!</item>
+        <item>Welcome to Cool\'s-Ville, Population: Me</item>
+        <item>Dear diary… Jackpot!</item>
+
+    </string-array>
 
 
     <string-array name="prepQuotes">
@@ -76,6 +161,8 @@
         <item>Exercise… Zombies will eat the slow ones first</item>
         <item>ZombieLand Rule #1 - Cardio</item>
         <item>ZombieLand Rule #20 – It’s a marathon, not a sprint. Unless it is a sprint, then sprint</item>
+        <item>You have a choice. You can throw in the towel, or you can use it to wipe the sweat off of your face</item>
+        <item>Some of the world\'s greatest feats were accomplished by people not smart enough to know they were impossible</item>
     </string-array>
 
     <string-array name="restQuotes">
@@ -100,6 +187,8 @@
         <item>Excuses burn zero calories</item>
         <item>You are the creator of your own destiny</item>
         <item>Your future self will thank you for today</item>
+        <item>Do a little more each day than you think you possibly can</item>
+
     </string-array>
 
 </resources>

@@ -5,10 +5,15 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_standard">16dp</dimen>
-        <dimen name="margin_double">24dp</dimen>
+    <dimen name="margin_double">24dp</dimen>
+
+    <dimen name="margin_settings_clearance">44dp</dimen>
+    <dimen name="margin_settings_clearance_port">88dp</dimen>
+
 
     <dimen name="fab_space">72dp</dimen>
 
+    <dimen name="default_circle_view_size">100dp</dimen>
 
     <dimen name="carc_item_title">16sp</dimen>
     <dimen name="carc_item_text">14sp</dimen>

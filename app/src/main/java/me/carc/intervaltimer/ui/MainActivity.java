@@ -8,12 +8,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Vibrator;
+import android.os.Handler;
 import android.support.annotation.ArrayRes;
+import android.support.annotation.ColorRes;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AlertDialog;
@@ -23,7 +24,9 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -46,46 +49,49 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import me.carc.intervaltimer.App;
-import me.carc.intervaltimer.ui.adapters.HistoryAdapter;
+import me.carc.intervaltimer.BuildConfig;
 import me.carc.intervaltimer.R;
+import me.carc.intervaltimer.alarm.AlarmHelper;
 import me.carc.intervaltimer.db.AppDatabase;
 import me.carc.intervaltimer.model.HistoryItem;
+import me.carc.intervaltimer.model.WorkoutSchedule;
+import me.carc.intervaltimer.sound.SoundServices;
 import me.carc.intervaltimer.settings.Preferences;
 import me.carc.intervaltimer.settings.SettingsActivity;
+import me.carc.intervaltimer.ui.adapters.HistoryAdapter;
+import me.carc.intervaltimer.ui.listeners.ClickListener;
 import me.carc.intervaltimer.utils.Commons;
 import me.carc.intervaltimer.utils.ViewUtil;
 import me.carc.intervaltimer.widgets.PickerPrefDialog;
+import me.carc.intervaltimer.widgets.circle_progress.DonutProgress;
 
 public class MainActivity extends Activity implements SensorEventListener {
-    public interface ClickListener {
-        void onClick(HistoryItem item);
-
-        void onLongClick(HistoryItem item);
-    }
 
     private static final String TAG = MainActivity.class.getName();
+
+    public static final String ACTION_CONTINUE_RUN = "CONTINUE_RUN";
+
+
     private final int SECONDS_MILLI = 1000;
     private final int PREP_TIME_MILLI = 5000;
 
+    private final int RESULT_PREFERENCES = 159;
+
     private boolean isRunning = false;
     private String runTime;
-    private long workTimeMillis, restTimeMillis, endRoundWarnMillis, proximityDebounce;
+    private long workTimeMillis, restTimeMillis, endRoundWarnMillis, debounceCounter, totalWorkoutTime;
 
-    private enum State {REST, WORK, PREP, DONE}
+    public enum State {REST, WORK, PREP, DONE}
 
-    private enum Running {WORK, PAUSE}
+    public enum Running {WORK, PAUSE}
 
     private State state = null;
     private int roundCurrent, roundsTotal;
 
     private Counter workTimer, restTimer, prepTimer;
 
-    private SoundPool soundPool;
-    private boolean loaded, mute, proximity;
-    private int soundPrepId, soundFinishedId;
+    private boolean mute, proximity;
 
-    private Vibrator vibrator;
-    private long[] vPattern = {0, 300, 100, 300, 100, 300};
     private SensorManager sensorManager;
     private Sensor proximitySensor;
 
@@ -96,35 +102,46 @@ public class MainActivity extends Activity implements SensorEventListener {
     Observable<Long> observable;
     Disposable elapsedTimeDisposable;
 
+    AlarmHelper alarmHelper;
+    WorkoutSchedule schedule;
 
+
+    @BindView(R.id.workoutTime)         TextView workoutTime;
     @BindView(R.id.elapsedTime)         TextView elapsedTime;
     @BindView(R.id.timerBackground)     RelativeLayout timerBackground;
     @BindView(R.id.workPreviewText)     TextView workPreviewText;
     @BindView(R.id.restPreviewText)     TextView restPreviewText;
     @BindView(R.id.time_panel)          LinearLayout timeLeftPanel;
-    @BindView(R.id.time_left_textView)  TextView textViewTime;
+    @BindView(R.id.timerRemaining)      TextView timerRemaining;
     @BindView(R.id.timerMessage)        TextView timerMessage;
     @BindView(R.id.round_number)        TextView textViewRounds;
     @BindView(R.id.fabSettings)         FloatingActionButton fabSettings;
-    @BindView(R.id.fab)                 FloatingActionButton fab;
+    @BindView(R.id.fabTimer)            FloatingActionButton fab;
     @BindView(R.id.resetLayer)          RelativeLayout resetLayer;
     @BindView(R.id.resetBtn)            Button resetBtn;
     @BindView(R.id.recyclerView)        RecyclerView recyclerView;
+    @BindView(R.id.fabDonutProgress)    DonutProgress fabDonutProgress;
 
 
     Observer<Long> observerTime = new Observer<Long>() {
         @Override
         public void onSubscribe(Disposable d) {
             elapsedTime.setVisibility(View.VISIBLE);
+            elapsedTime.setText("00:00:00");
             elapsedTimeDisposable = d;
         }
 
         @Override
         public void onNext(Long value) {
-            long millis = value * 1000;
-            long second = (millis / 1000) % 60;
-            long minute = (millis / (1000 * 60)) % 60;
-            long hour = (millis / (1000 * 60 * 60)) % 24;
+
+            if(isRunning && totalWorkoutTime > 0) {
+                totalWorkoutTime = totalWorkoutTime - 1000;
+                workoutTime.setText(getElaspedTime(totalWorkoutTime));
+            }
+
+            long second = (value) % 60;
+            long minute = (value / 60) % 60;
+            long hour = (value / (60 * 60)) % 24;
             elapsedTime.setText(String.format(Locale.getDefault(), "%02d:%02d:%02d", hour, minute, second));
         }
 
@@ -135,59 +152,116 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         @Override
         public void onComplete() {
-            elapsedTime.setVisibility(View.INVISIBLE);
             elapsedTimeDisposable.dispose();
         }
     };
 
-    @OnClick(R.id.fab)
+
+    Handler handler = new Handler();
+
+    private final Runnable preLoadRunner = new Runnable() {
+        int progress = 1;
+
+        public void run() {
+            try {
+                int increment = BuildConfig.DEBUG ? 5 : 2;
+                fabDonutProgress.setProgress(fabDonutProgress.getProgress() + increment);
+                if(fabDonutProgress.getProgress() == 100) {
+
+                    fab.setOnTouchListener(null);
+
+                    if (state == State.WORK)
+                        workTimerPause();
+                    else if (state == State.REST)
+                        restTimerPause();
+                    else if (state == State.PREP)
+                        prepTimerPause();
+
+                    showView(resetLayer);
+
+                } else
+                    handler.postDelayed(this, 10);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    FloatingActionButton.OnTouchListener fabTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch(event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    preLoadRunner.run();
+                    return true;
+
+                case MotionEvent.ACTION_UP:
+                    handler.removeCallbacks(preLoadRunner);
+                    fabDonutProgress.setProgress(0);
+                    return true;
+            }
+            return false;
+        }
+    };
+
+
+    @OnClick(R.id.fabTimer)
     void fabClick() {
         fabSettings.hide();
-        fab.setKeepScreenOn(Preferences.stayAwake(this));
+
+        if(Preferences.stayAwake(this)) {
+            fab.setKeepScreenOn(Preferences.stayAwake(this));
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+
         timerMessage.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
 
-        if (prepTimer == null && roundCurrent == 1 && state == State.PREP) {
-            prepTimer = new Counter(PREP_TIME_MILLI, SECONDS_MILLI);
-            isRunning = true;
-            prepTimer.start();
-            setViewColors();
-            changeFabAppearance(Running.PAUSE);
+        if (!isRunning) {
 
-            observable = Observable.interval(1, TimeUnit.SECONDS, Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-            observable.subscribe(observerTime);
+            fab.setOnTouchListener(fabTouchListener);
+            fabDonutProgress.setProgress(0);
 
-        } else if (workTimer == null && roundCurrent == 1 && state == State.WORK) {
-            workTimer = new Counter(workTimeMillis, SECONDS_MILLI);
-            isRunning = true;
-            workTimer.start();
-            setViewColors();
-            changeFabAppearance(Running.PAUSE);
+            if (prepTimer == null && roundCurrent == 1 && state == State.PREP) {
+                prepTimer = new Counter(PREP_TIME_MILLI, SECONDS_MILLI);
+                isRunning = true;
+                prepTimer.start();
+                setViewColors();
+                changeFabAppearance(Running.PAUSE);
 
-            observable = Observable.interval(1, TimeUnit.SECONDS, Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-            observable.subscribe(observerTime);
+                getSounds().playVoice(getRandomString(R.array.prepTTS));
 
-        } else {
-            if (!isRunning) {
+                observable = Observable.interval(5L, 1, TimeUnit.SECONDS, Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                observable.subscribe(observerTime);
+
+            } else if (workTimer == null && roundCurrent == 1 && state == State.WORK) {
+                workTimer = new Counter(workTimeMillis, SECONDS_MILLI);
+                alarmHelper.setAlarm(System.currentTimeMillis() + (workTimeMillis), State.REST);
+
+                getSounds().playVoice(getRandomString(R.array.workTTS));
+
+
+                observable = Observable.interval(1, TimeUnit.SECONDS, Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                observable.subscribe(observerTime);
+
+                isRunning = true;
+                workTimer.start();
+                setViewColors();
+                changeFabAppearance(Running.PAUSE);
+
+            } else {
+//                if (!isRunning) {
                 if (state != State.DONE)
                     hideView(resetLayer);
 
                 if (state == State.WORK)
                     workTimerResume();
+
                 else if (state == State.REST)
                     restTimerResume();
+
                 else if (state == State.PREP)
                     prepTimerResume();
-
-            } else {
-                if (state == State.WORK)
-                    workTimerPause();
-                else if (state == State.REST)
-                    restTimerPause();
-                else if (state == State.PREP)
-                    prepTimerPause();
-
-                showView(resetLayer);
             }
         }
     }
@@ -197,6 +271,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         if (isRunning) {
             Commons.Toast(MainActivity.this, R.string.stop_toast, ContextCompat.getColor(this, R.color.darkRed), Toast.LENGTH_SHORT);
         } else {
+            alarmHelper.removeAlarm(state);
 
             addToDatabase();
 
@@ -210,7 +285,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             tempMillisLeft = workTimeMillis;
             roundCurrent = 1;
             setRoundTextView();
-            textViewTime.setText(runTime);
+            timerRemaining.setText(runTime);
             if (Preferences.isPrepEnabled(this)) {
                 state = State.PREP;
             } else {
@@ -223,6 +298,12 @@ public class MainActivity extends Activity implements SensorEventListener {
             hideView(resetLayer);
             fabSettings.show();
             fab.setKeepScreenOn(false);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+            fabDonutProgress.setProgress(0);
+
+            totalWorkoutTime = (workTimeMillis * roundsTotal) + (restTimeMillis * (roundsTotal - 1));
+            workoutTime.setText(getElaspedTime(totalWorkoutTime));
         }
         return true;
     }
@@ -235,12 +316,13 @@ public class MainActivity extends Activity implements SensorEventListener {
     private void addToDatabase() {
         final int id = getDataUUID();
         final String date = String.format(Locale.US, getString(R.string.history_item_date), Commons.readableDate(System.currentTimeMillis()));
+        final String remainTitle = workoutTime.getText().toString();
         final String elaspedTime = elapsedTime.getText().toString();
         final int roundsCompleted = this.roundCurrent;
         final int roundsTotal = this.roundsTotal;
         final String workTime = Preferences.getWorkTime(this);
         final String restTime = Preferences.getRestTime(this);
-        final HistoryItem historyItem = new HistoryItem(id, date, elaspedTime, roundsCompleted, roundsTotal, workTime, restTime);
+        final HistoryItem historyItem = new HistoryItem(id, date, "Rename Me", remainTitle, elaspedTime, roundsCompleted, roundsTotal, workTime, restTime);
 
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
@@ -257,6 +339,34 @@ public class MainActivity extends Activity implements SensorEventListener {
                 });
             }
         });
+    }
+
+    private void addToDatabase(final HistoryItem historyItem) {
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase db = ((App) getApplicationContext()).getDB();
+                db.historyDao().insert(historyItem);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((HistoryAdapter) recyclerView.getAdapter()).addItem(historyItem);
+                        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * // TODO: 05/02/2018 show progress dialog as this can take time
+     * @param keyId the history item index
+     * @return the history item
+     */
+    private HistoryItem getFromDatabase(int keyId) {
+        AppDatabase db = ((App) getApplicationContext()).getDB();
+        return db.historyDao().findByIndex(keyId);
     }
 
     private void loadDatabase() {
@@ -314,7 +424,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             Commons.Toast(MainActivity.this, R.string.stop_toast, ContextCompat.getColor(this, R.color.darkRed), Toast.LENGTH_SHORT);
         } else {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivityForResult(intent, 159);
+            startActivityForResult(intent, RESULT_PREFERENCES);
         }
     }
 
@@ -330,8 +440,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.values[0] == 0 && proximity && proximityDebounce < System.currentTimeMillis()) {
-            proximityDebounce = System.currentTimeMillis() + 1000;  //
+        if (event.values[0] == 0 && proximity && debounceCounter < System.currentTimeMillis()) {
+            debounceCounter = System.currentTimeMillis() + 1000;  //
             fabClick();
         }
     }
@@ -340,6 +450,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -350,31 +461,20 @@ public class MainActivity extends Activity implements SensorEventListener {
         // Sets the hardware button to control music volume
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
-        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-            @Override
-            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-                loaded = true;
-            }
-        });
-        soundPrepId = soundPool.load(this, R.raw.single_beep, 1);
-        soundFinishedId = soundPool.load(this, R.raw.single_beep, 1);
-
         roundCurrent = 1;
 
         // Load shared preferences
         loadPreferences();
 
         // Initialize Vibration on phone
-        vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
-        textViewTime.setText(runTime);
+        timerRemaining.setText(runTime);
         setRoundTextView();
         changeFabAppearance(Running.WORK);
 
         setViewColors();
         hideView(resetLayer);
 
-        HistoryAdapter adapter = new HistoryAdapter(new MainActivity.ClickListener() {
+        HistoryAdapter adapter = new HistoryAdapter(new ClickListener() {
             @Override
             public void onClick(HistoryItem item) {
             }
@@ -424,8 +524,40 @@ public class MainActivity extends Activity implements SensorEventListener {
         recyclerView.setLayoutManager(mLayoutManager);
 
         loadDatabase();
+
+        alarmHelper = new AlarmHelper();
+        alarmHelper.init(this);
     }
 
+
+    private SoundServices getSounds() {
+        return ((App)getApplicationContext()).getSoundServices();
+    }
+
+    private boolean debounce() {
+        if (debounceCounter < System.currentTimeMillis()) {
+            debounceCounter = System.currentTimeMillis() + 1000;
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isRunning)
+            showSnack("Stop and Reset timer to exit", R.color.md_red_700);
+        else if(debounce())
+            super.onBackPressed();
+        else
+            showSnack("Press twice to exit", R.color.md_red_700);
+    }
+
+    private void showSnack(String text, @ColorRes int color) {
+        Snackbar snackbar = Snackbar.make(fab, text, Snackbar.LENGTH_LONG);
+        View view = snackbar.getView();
+        view.setBackgroundColor(ContextCompat.getColor(this, color));
+        snackbar.show();
+    }
 
     private void removeAllItems() {
 
@@ -456,9 +588,9 @@ public class MainActivity extends Activity implements SensorEventListener {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case 159:
+            case RESULT_PREFERENCES:
                 loadPreferences();
-                textViewTime.setText(runTime);
+                timerRemaining.setText(runTime);
                 break;
             default:
         }
@@ -480,7 +612,13 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     protected void onResume() {
+        ((App)getApplication()).setActive(true);
         super.onResume();
         if (proximity) {
             sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -489,10 +627,16 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     protected void onPause() {
+        ((App)getApplication()).setActive(false);
         super.onPause();
         if (proximity) {
             sensorManager.unregisterListener(this);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -503,6 +647,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     protected void onDestroy() {
+        alarmHelper.removeAlarm(state);
         finish();
         super.onDestroy();
     }
@@ -523,43 +668,19 @@ public class MainActivity extends Activity implements SensorEventListener {
         return super.onOptionsItemSelected(item);
     }
 
-    private void playFinishedSound() {
-        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        float actualVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        float volume = actualVolume / maxVolume;
-        if (loaded && !mute) {
-            soundPool.play(soundPrepId, volume, volume, 1, 0, 1f);
-        }
-        if (Preferences.useVibrate(this))
-            vibrator.vibrate(vPattern, -1);
-    }
-
-
-    private void playPrepSound() {
-        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        float actualVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        float volume = actualVolume / maxVolume;
-        if (loaded && !mute) {
-            soundPool.play(soundPrepId, volume, volume, 1, 0, 1f);
-        }
-        if (Preferences.useVibrate(this))
-            vibrator.vibrate(vPattern, -1);
-    }
-
-
     // TODO Clean up code : set restTimer/WorkTimer to null
 
     private void restTimerPause() {
         tempMillisLeft = restTimer.getMillisLeft();
         restTimer.cancel();
+        alarmHelper.removeAlarm(state);
         changeFabAppearance(Running.WORK);
         isRunning = false;
     }
 
     private void restTimerResume() {
         restTimer = new Counter(tempMillisLeft, SECONDS_MILLI);
+        alarmHelper.setAlarm(tempMillisLeft, state);
         isRunning = true;
         changeFabAppearance(Running.PAUSE);
         restTimer.start();
@@ -582,6 +703,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private void workTimerPause() {
         tempMillisLeft = workTimer.getMillisLeft();
         workTimer.cancel();
+        alarmHelper.removeAlarm(state);
         changeFabAppearance(Running.WORK);
         isRunning = false;
     }
@@ -589,6 +711,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private void workTimerResume() {
         workTimer = new Counter(tempMillisLeft, SECONDS_MILLI);
         isRunning = true;
+        alarmHelper.setAlarm(tempMillisLeft, state);
         changeFabAppearance(Running.PAUSE);
         workTimer.start();
     }
@@ -627,6 +750,10 @@ public class MainActivity extends Activity implements SensorEventListener {
                 timerMessage.setText(getRandomString(R.array.prepQuotes));
             else
                 timerMessage.setText(R.string.prepDefaultMsg);
+        } else if (state == State.DONE) {
+            timerBackground.setBackgroundResource(R.drawable.timer_bg_primary);
+            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.white));
+            timerMessage.setText(R.string.workoutComplete);
         }
 
         if (!showQuotes)
@@ -655,7 +782,9 @@ public class MainActivity extends Activity implements SensorEventListener {
         workTimeMillis = PickerPrefDialog.getMillis(Preferences.getWorkTime(this));
         restTimeMillis = PickerPrefDialog.getMillis(Preferences.getRestTime(this));
 
-        mute = Preferences.isMuted(this);
+        totalWorkoutTime = (workTimeMillis * roundsTotal) + (restTimeMillis * (roundsTotal - 1));
+
+        mute = Preferences.useSounds(this);
         if (Preferences.isPrepEnabled(this)) {
             state = State.PREP;
         } else {
@@ -669,8 +798,15 @@ public class MainActivity extends Activity implements SensorEventListener {
         String restTime = Commons.formatString(TimeUnit.MILLISECONDS.toMinutes(restTimeMillis), TimeUnit.MILLISECONDS.toSeconds(restTimeMillis) % 60);
         restPreviewText.setText(String.format(getString(R.string.rest), restTime));
 
+        workoutTime.setText(getElaspedTime(totalWorkoutTime));
+
         if(!Preferences.showHistory(this))
             recyclerView.setVisibility(View.GONE);
+
+        schedule = new WorkoutSchedule(state, state == State.PREP ? 5000 : 0, workTimeMillis, restTimeMillis, roundCurrent, roundsTotal);
+
+
+
     }
 
     // Counter CLASS Section
@@ -690,47 +826,71 @@ public class MainActivity extends Activity implements SensorEventListener {
                     prepTimer = null;
                 }
                 state = State.WORK;
+                alarmHelper.setAlarm(System.currentTimeMillis() + (workTimeMillis), state);
                 workTimer = new Counter(workTimeMillis, SECONDS_MILLI);
                 workTimer.start();
+
+                getSounds().playVoice(getRandomString(R.array.workTTS));
+
                 setViewColors();
+
             } else if (state == State.REST && roundCurrent < roundsTotal) {
                 ++roundCurrent;
                 if (restTimer != null) {
                     restTimer.cancel();
                     restTimer = null;
                 }
+                alarmHelper.setAlarm(System.currentTimeMillis() + (workTimeMillis), state);
                 state = State.WORK;
                 setRoundTextView();
                 setViewColors();
                 workTimer = new Counter(workTimeMillis, SECONDS_MILLI);
                 workTimer.start();
+
+                getSounds().playVoice(getRandomString(R.array.workTTS));
+
             } else if (state == State.WORK && roundCurrent < roundsTotal) {
                 if (workTimer != null) {
                     workTimer.cancel();
                     workTimer = null;
                 }
                 if (restTimeMillis > 0) {
+                    alarmHelper.setAlarm(System.currentTimeMillis() + (restTimeMillis), state);
                     state = State.REST;
                     setRoundTextView();
                     setViewColors();
                     restTimer = new Counter(restTimeMillis, SECONDS_MILLI);
                     restTimer.start();
 
+                    getSounds().playVoice(getRandomString(R.array.restTTS));
+
                 } else {
                     ++roundCurrent;
+                    alarmHelper.setAlarm(System.currentTimeMillis() + (workTimeMillis), state);
                     state = State.WORK;
                     setRoundTextView();
                     setViewColors();
                     workTimer = new Counter(workTimeMillis, SECONDS_MILLI);
                     workTimer.start();
+
+                    getSounds().playVoice(getRandomString(R.array.workTTS));
+
                 }
             } else if (roundCurrent == roundsTotal) {
 
                 // TODO Allow to share number of rounds/total time worked out on FB, Twitter, G+
 
-                playFinishedSound();
+                getSounds().playAlarmSound(mute, Preferences.useVibrate(MainActivity.this));
 
-                textViewTime.setText("--:--!");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getSounds().playVoice(getRandomString(R.array.doneTTS));
+                    }
+                }, 1500);
+
+
+                timerRemaining.setText("--:--");
                 state = State.DONE;
                 setRoundTextView();
                 setViewColors();
@@ -744,14 +904,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         @Override
         public void onTick(long millisUntilFinished) {
-            if (millisUntilFinished < endRoundWarnMillis) {
-                playPrepSound();
-            }
+            if (millisUntilFinished < endRoundWarnMillis)
+                getSounds().playSingleBeepSound(mute, Preferences.useVibrate(MainActivity.this));
 
             millisLeft = millisUntilFinished;
             mins = TimeUnit.MILLISECONDS.toMinutes(millisLeft);
             secs = TimeUnit.MILLISECONDS.toSeconds(millisLeft) % 60;
-            textViewTime.setText(Commons.formatString(mins, secs));
+            timerRemaining.setText(Commons.formatString(mins, secs));
         }
 
         long getMillisLeft() {

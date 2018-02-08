@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -29,6 +30,8 @@ import android.view.animation.Interpolator;
 import android.view.animation.PathInterpolator;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 
 /**
  * Created by Carc.me on 05.06.16.
@@ -46,6 +49,34 @@ public class ViewUtil {
         throw new AssertionError();
     }
 
+
+    public static String getTimeText(int ms) {
+        return timeUnitToString(getMinutesFromMs(ms)) + "." + timeUnitToString(getSecondsFromMs(ms));
+    }
+
+    public static String timeUnitToString(int number) {
+        return String.format(Locale.ENGLISH, "%02d", number);
+    }
+
+    public static int getMinutesFromMs(int ms) {
+        return ms / 1000 / 60;
+    }
+
+    public static int getSecondsFromMs(int ms) {
+        return ms / 1000 % 60;
+    }
+
+
+
+    public static float dp2px(Resources resources, float dp) {
+        final float scale = resources.getDisplayMetrics().density;
+        return  dp * scale + 0.5f;
+    }
+
+    public static float sp2px(Resources resources, float sp){
+        final float scale = resources.getDisplayMetrics().scaledDensity;
+        return sp * scale;
+    }
 
     public static int getStatusBarHeight(Context ctx) {
         int result = 0;

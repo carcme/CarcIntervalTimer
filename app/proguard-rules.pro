@@ -5,3 +5,6 @@
 -dontnote com.mikepenz.fastadapter.items.**
 
 -dontwarn android.arch.persistence.room.paging.LimitOffsetDataSource
+
+-keep class javax.annotation.** { *; }
+-dontwarn javax.annotation.**

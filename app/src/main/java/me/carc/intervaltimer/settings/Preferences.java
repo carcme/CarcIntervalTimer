@@ -19,6 +19,7 @@ public class Preferences {
     final static String WARNING_TIME = "warn_time_key";
     final static String ROUNDS_CNT = "number_rounds_key";
     final static String MUTE = "mute_key";
+    final static String VOICE = "voice_key";
     final static String QUOTES = "quotes_key";
     final static String HISTORY = "history_key";
 
@@ -73,9 +74,14 @@ public class Preferences {
         return value.getString(ROUNDS_CNT, "9");
     }
 
-    public static Boolean isMuted(Context context) {
+    public static Boolean useSounds(Context context) {
         SharedPreferences value = PreferenceManager.getDefaultSharedPreferences(context);
         return value.getBoolean(MUTE, false);
+    }
+
+    public static Boolean useVoices(Context context) {
+        SharedPreferences value = PreferenceManager.getDefaultSharedPreferences(context);
+        return value.getBoolean(VOICE, false);
     }
 
     public static Boolean showQuotes(Context context) {

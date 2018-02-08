@@ -16,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.carc.intervaltimer.R;
 import me.carc.intervaltimer.model.HistoryItem;
-import me.carc.intervaltimer.ui.MainActivity;
+import me.carc.intervaltimer.ui.listeners.ClickListener;
 
 /**
  * Show other apps from Carc
@@ -26,9 +26,9 @@ import me.carc.intervaltimer.ui.MainActivity;
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
     private List<HistoryItem> mItems = new ArrayList<>();
-    private MainActivity.ClickListener clickListener;
+    private ClickListener clickListener;
 
-    public HistoryAdapter(MainActivity.ClickListener listener){
+    public HistoryAdapter(ClickListener listener){
         clickListener = listener;
     }
     

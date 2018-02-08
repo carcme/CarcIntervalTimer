@@ -34,11 +34,16 @@
 
     <string name="stop_toast">Please stop timer first</string>
     <string name="prep_time_title">Preparation Time</string>
-    <string name="prep_time_summary">Add 5 seconds prep before timer starts</string>
+    <string name="prep_time_summary">Add 7 seconds prep before timer starts</string>
     <string name="prep_time_summary_disabled">Time will start immediately</string>
-    <string name="mute_title">Mute Sounds</string>
-    <string name="mute_summary">Sounds are enabled</string>
-    <string name="mute_summary_disabled">No sounds will be played</string>
+    <string name="mute_title">Play Sounds</string>
+    <string name="voice_title">Play Voice</string>
+    <string name="mute_summary_on">Sounds are enabled</string>
+    <string name="mute_summary_off">No sounds will be played</string>
+
+    <string name="voice_summary_off">No voices will be played</string>
+    <string name="voice_summary_on">Voice notifications are enabled</string>
+
     <string name="default_rest_time_value">1:00</string>
     <string name="default_work_time_value">1:00</string>
     <string name="hold_to_reset">Hold to reset</string>
@@ -55,6 +60,7 @@
     <string name="restDefaultMsg">Rest</string>
     <string name="prepDefaultMsg">Get Ready</string>
 
+    <string name="workoutComplete">Workout Complete</string>
 
 
     <string name="shared_string_about">About</string>
@@ -110,5 +116,12 @@
     <string name="shared_string_error">"Error!"</string>
     <string name="carc_image">Play Store image for application</string>
     <string name="website_todo">I haven\'t built the site yet</string>
+
+
+    <string name="effort_hard">Hard</string>
+    <string name="effort_easy">Easy</string>
+    <string name="effort_rest">Rest</string>
+    <string name="effort_none">n/a</string>
+
 
 </resources>
