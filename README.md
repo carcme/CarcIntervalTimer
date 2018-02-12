@@ -19,7 +19,20 @@ It was developed for running but can be used for exercise that uses intervals.
 - Etc
 
 #### ToDo List
-- [ ] Add 'End of Workout' alarm
+- [x] Add 'End of Workout' alarm
 - [x] Rating dialog
 - [x] Feedback dialog
+- [x] Background service for Timer
+- [ ] Tailor voices with accents depending on the phrase spoken
+- [x] Set work, rest and round times from main screen
+- [x] Create number picker builder for setting work, rest and round times from main screen
+- [x] Auto size motivation quotes
+- [x] Animated gradient on main screen
+- [ ] Animated gradient on prep  screen
+- [ ] Animated gradient on work screen
+- [ ] Animated gradient on rest screen
+- [x] History dialog for workout summary 
+- [x] Lock items to the database - they're not deleted while locked
+
+
 
