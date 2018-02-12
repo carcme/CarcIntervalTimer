@@ -22,8 +22,8 @@ android {
         applicationId "me.carc.carcintervaltimer"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode="5"
-        versionName="0.0.5-beta"
+        versionCode="7"
+        versionName="0.0.7-beta"
         vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
             annotationProcessorOptions {

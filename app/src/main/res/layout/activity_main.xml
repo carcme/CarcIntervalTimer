@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/black"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.ServicedActivity">
 
     <RelativeLayout
         android:id="@+id/timerBackground"
@@ -15,38 +15,19 @@
         android:paddingTop="?attr/actionBarSize">
 
         <LinearLayout
-            android:id="@+id/round_panel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/round"
-                android:textSize="24sp"/>
-
-            <TextView
-                android:id="@+id/round_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="24sp"
-                tools:text="12/12"/>
-
-        </LinearLayout>
-
-        <LinearLayout
+            android:id="@+id/workSettingsPanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:weightSum="3"
             android:orientation="horizontal"
             android:paddingEnd="@dimen/margin_standard"
             android:paddingStart="@dimen/margin_standard">
 
             <LinearLayout
+                android:id="@+id/workPanel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -60,13 +41,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    tools:text="Workout Time"/>
+                    tools:text="Workout"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/roundPanel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/round"
+                    android:textSize="24sp"/>
+
+                <TextView
+                    android:id="@+id/round_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    tools:text="12/12"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/restPanel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -82,35 +89,35 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:textSize="20sp"
-                    tools:text="Elapsed Time"/>
+                    tools:text="Elapsed"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-            <TextView
-                android:id="@+id/timerRemaining"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/round_panel"
-                android:gravity="center_horizontal"
-                android:text="@string/initial_time"
-                android:textColor="#000000"
-                android:textSize="120sp"
-                tools:textColor="#FFF"/>
-
         <TextView
+            android:id="@+id/timerRemaining"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/workSettingsPanel"
+            android:gravity="center_horizontal"
+            android:text="@string/initial_time"
+            android:textColor="#000000"
+            android:textSize="120sp"
+            tools:textColor="#FFF"/>
+
+        <me.carc.intervaltimer.widgets.AutoResizeTextView
             android:id="@+id/timerMessage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/timerRemaining"
-            android:paddingStart="@dimen/margin_standard"
-            android:paddingEnd="@dimen/margin_standard"
-            android:layout_marginBottom="@dimen/fab_space"
             android:layout_alignParentBottom="true"
+            android:layout_below="@id/timerRemaining"
+            android:layout_marginBottom="@dimen/fab_space"
             android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center_horizontal"
-            android:textSize="30sp"
+            android:gravity="center_vertical|center_horizontal"
+            android:paddingEnd="@dimen/margin_standard"
+            android:paddingStart="@dimen/margin_standard"
+            android:textSize="100sp"
             android:visibility="visible"
             tools:text="It’s not the will to win that matters, everyone has that. It’s the will to prepare to win that matters"/>
 
@@ -118,15 +125,43 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_standard"
-            android:layout_below="@id/timerRemaining"
             android:layout_alignParentBottom="true"
+            android:layout_below="@id/timerRemaining"
             android:layout_marginBottom="@dimen/fab_space"
+            android:padding="@dimen/margin_standard"
             android:scrollbars="none"
             tools:visibility="visible"/>
 
     </RelativeLayout>
 
+
+    <RelativeLayout
+        android:id="@+id/resetLayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        tools:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:src="@drawable/background_tint"/>
+
+        <Button
+            android:id="@+id/resetBtn"
+            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:background="@drawable/solid_button_background"
+            android:paddingEnd="@dimen/margin_double"
+            android:paddingStart="@dimen/margin_double"
+            android:text="@string/hold_to_reset"/>
+
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabSettings"
@@ -152,7 +187,6 @@
         app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@android:drawable/ic_media_play"/>
 
-
     <me.carc.intervaltimer.widgets.circle_progress.DonutProgress
         android:id="@+id/fabDonutProgress"
         android:layout_width="@dimen/fab_space"
@@ -166,33 +200,5 @@
         app:donut_text=""
         app:donut_unfinished_color="@android:color/transparent"
         app:layout_anchorGravity="bottom|end"/>
-
-
-    <RelativeLayout
-        android:id="@+id/resetLayer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:visibility="gone">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@null"
-            android:src="@drawable/background_tint"/>
-
-        <Button
-            android:id="@+id/resetBtn"
-            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/margin_standard"
-            android:background="@drawable/solid_button_background"
-            android:paddingEnd="@dimen/margin_double"
-            android:paddingStart="@dimen/margin_double"
-            android:text="@string/hold_to_reset"/>
-
-    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

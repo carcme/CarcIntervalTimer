@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -20,12 +23,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -66,10 +67,16 @@ import me.carc.intervaltimer.ui.adapters.HistoryAdapter;
 import me.carc.intervaltimer.ui.listeners.ClickListener;
 import me.carc.intervaltimer.utils.Commons;
 import me.carc.intervaltimer.utils.ViewUtil;
+import me.carc.intervaltimer.widgets.AutoResizeTextView;
+import me.carc.intervaltimer.widgets.HistoryViewerDialog;
+import me.carc.intervaltimer.widgets.NumberPickerBuilder;
 import me.carc.intervaltimer.widgets.PickerPrefDialog;
 import me.carc.intervaltimer.widgets.circle_progress.DonutProgress;
+import me.carc.intervaltimer.widgets.listeners.HistoryItemLockListener;
+import me.carc.intervaltimer.widgets.listeners.NumberSetListener;
 
 public class ServicedActivity extends Activity implements SensorEventListener {
+
 
     private enum Running {WORK, PAUSE}
 
@@ -81,7 +88,7 @@ public class ServicedActivity extends Activity implements SensorEventListener {
 
     private String runTime;
     private long workTimeMillis, restTimeMillis, debounceCounter, totalWorkoutTime;
-
+    private AnimationDrawable bgAnimation;
     private int roundCurrent, roundsTotal;
     private boolean prepEnabled, proximity;
 
@@ -93,34 +100,20 @@ public class ServicedActivity extends Activity implements SensorEventListener {
     private ProgramBinder programBinder;
     private RunnerServiceConnection connection;
 
-
-    @BindView(R.id.workoutTime) TextView workoutTime;
-    @BindView(R.id.elapsedTime)
-    TextView elapsedTime;
-    @BindView(R.id.timerBackground)
-    RelativeLayout timerBackground;
-    @BindView(R.id.workPreviewText)
-    TextView workPreviewText;
-    @BindView(R.id.restPreviewText)
-    TextView restPreviewText;
-    @BindView(R.id.timerRemaining)
-    TextView timerRemaining;
-    @BindView(R.id.timerMessage)
-    TextView timerMessage;
-    @BindView(R.id.round_number)
-    TextView textViewRounds;
-    @BindView(R.id.fabSettings)
-    FloatingActionButton fabSettings;
-    @BindView(R.id.fabTimer)
-    FloatingActionButton fabTimer;
-    @BindView(R.id.resetLayer)
-    RelativeLayout resetLayer;
-    @BindView(R.id.resetBtn)
-    Button resetBtn;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.fabDonutProgress)
-    DonutProgress fabDonutProgress;
+    @BindView(R.id.workoutTime)     TextView workoutTime;
+    @BindView(R.id.elapsedTime)     TextView elapsedTime;
+    @BindView(R.id.timerBackground) RelativeLayout timerBackground;
+    @BindView(R.id.workPreviewText) TextView workPreviewText;
+    @BindView(R.id.restPreviewText) TextView restPreviewText;
+    @BindView(R.id.timerRemaining)  TextView timerRemaining;
+    @BindView(R.id.timerMessage)    AutoResizeTextView timerMessage;
+    @BindView(R.id.round_number)    TextView textViewRounds;
+    @BindView(R.id.fabSettings)     FloatingActionButton fabSettings;
+    @BindView(R.id.fabTimer)        FloatingActionButton fabTimer;
+    @BindView(R.id.resetLayer)      RelativeLayout resetLayer;
+    @BindView(R.id.resetBtn)        Button resetBtn;
+    @BindView(R.id.recyclerView)    RecyclerView recyclerView;
+    @BindView(R.id.fabDonutProgress)DonutProgress fabDonutProgress;
 
 
     private final Runnable longPressToPause = new Runnable() {
@@ -164,34 +157,9 @@ public class ServicedActivity extends Activity implements SensorEventListener {
     };
 
 
-    private class RunnerServiceConnection implements ServiceConnection {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            programBinder = (ProgramBinder) service;
-            programBinder.registerCountDownObserver(countDownObserver);
-
-            if (programBinder.isActive()) {
-                Log.d(TAG, "programBinder.isActive: ");
-            } else {
-                Log.d(TAG, "programBinder.NOT Active: ");
-            }
-
-            setViewColors(programBinder.getCurrentExercise().getEffortLevel());
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            programBinder = null;
-        }
-    }
-
-    public void doBindService() {
-        Intent serviceIntent = new Intent(this, ProgramRunService.class);
-        serviceIntent.putExtra(WorkoutMetaData.PROGRAM_ID_NAME, 1);
-        getApplicationContext().bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
-    }
-
     boolean isRunning = false;
+    boolean isPause = false;
+
 
     @OnClick(R.id.fabTimer)
     void fabClick() {
@@ -215,11 +183,7 @@ public class ServicedActivity extends Activity implements SensorEventListener {
                 recyclerView.setVisibility(View.GONE);
 
                 fabSettings.hide();
-
-                if (Preferences.stayAwake(this)) {
-                    fabTimer.setKeepScreenOn(Preferences.stayAwake(this));
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                }
+                keepScreenOn(true);
             }
         } else {
             programBinder.resume();
@@ -228,6 +192,8 @@ public class ServicedActivity extends Activity implements SensorEventListener {
 
     @OnLongClick(R.id.resetBtn)
     boolean reset() {
+        isRunning = false;
+
         if (programBinder != null) {
             programBinder.stop();
             if (programBinder != null) {
@@ -243,9 +209,8 @@ public class ServicedActivity extends Activity implements SensorEventListener {
             // Service was never bound, meh
         }
 
-        isRunning = false;
-
         addWorkoutToDatabase();
+        unlockOrientation();
 
         timerMessage.setVisibility(View.GONE);
         if (Preferences.showHistory(this))
@@ -255,6 +220,7 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         roundCurrent = 0;
         setRoundTextView();
         timerRemaining.setText(runTime);
+        elapsedTime.setText("");
 
         changeFabAppearance(Running.WORK);
         setViewColors(null);
@@ -264,8 +230,8 @@ public class ServicedActivity extends Activity implements SensorEventListener {
 
         fabTimer.setOnTouchListener(null);
         fabTimer.show();
-        fabTimer.setKeepScreenOn(false);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        keepScreenOn(false);
 
         fabDonutProgress.setProgress(0);
 
@@ -278,6 +244,76 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         return true;
     }
 
+    @OnClick(R.id.workPanel)
+    void adjustWorkTime() {
+        if(programBinder == null) {
+            long initValue = PickerPrefDialog.getMillis(Preferences.getWorkTime(this));
+            int minutes = (int)(initValue /1000 / 60);
+            int seconds = (int)((initValue / 1000) % 60);
+
+            new NumberPickerBuilder(this)
+                    .setPickerTitle(R.string.round_time_title)
+                    .setPickerCount(NumberPickerBuilder.MINS)
+                    .setValue(NumberPickerBuilder.MINS, minutes)
+                    .setValue(NumberPickerBuilder.SECS, seconds)
+                    .setMinMaxValue(NumberPickerBuilder.MINS, 0, 59)
+                    .setListener(new NumberSetListener() {
+                        @Override
+                        public void onNumberSet(String time) {
+                            Preferences.setWorkTime(ServicedActivity.this, time);
+                            loadPreferences(null);
+                        }
+                    })
+                    .show();
+        }
+    }
+
+    @OnClick(R.id.restPanel)
+    void adjustRestTime() {
+        if(programBinder == null) {
+            long initValue = PickerPrefDialog.getMillis(Preferences.getRestTime(this));
+            int minutes = (int)(initValue /1000 / 60);
+            int seconds = (int)((initValue / 1000) % 60);
+
+            new NumberPickerBuilder(this)
+                    .setPickerTitle(R.string.rest_time_title)
+                    .setPickerCount(NumberPickerBuilder.MINS)
+                    .setValue(NumberPickerBuilder.MINS, minutes)
+                    .setValue(NumberPickerBuilder.SECS, seconds)
+                    .setMinMaxValue(NumberPickerBuilder.MINS, 0, 59)
+                    .setListener(new NumberSetListener() {
+                        @Override
+                        public void onNumberSet(String time) {
+                            Preferences.setRestTime(ServicedActivity.this, time);
+                            loadPreferences(null);
+                        }
+                    })
+                    .show();
+        }
+    }
+
+    @OnClick(R.id.roundPanel)
+    void adjustRoundsCounter() {
+        if(programBinder == null) {
+            int rounds = Integer.valueOf(Preferences.getRoundsCount(this));
+
+            new NumberPickerBuilder(this)
+                    .setPickerTitle(R.string.num_round_title)
+                    .setPickerCount(NumberPickerBuilder.SECS)
+                    .setValue(NumberPickerBuilder.SECS, rounds)
+                    .setMinMaxValue(NumberPickerBuilder.SECS, 0, 99)
+                    .setListener(new NumberSetListener() {
+                        @Override
+                        public void onNumberSet(String count) {
+                            Preferences.setRoundsCount(ServicedActivity.this, count);
+                            loadPreferences(null);
+                        }
+                    })
+                    .show();
+        }
+    }
+
+
     private int getDataUUID() {
         return (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
     }
@@ -285,14 +321,14 @@ public class ServicedActivity extends Activity implements SensorEventListener {
 
     private void addWorkoutToDatabase() {
         final int id = getDataUUID();
-        final String date = String.format(Locale.US, getString(R.string.history_item_date), Commons.readableDate(System.currentTimeMillis()));
+        final String date = Commons.readableDate(System.currentTimeMillis());
         final String remainTitle = workoutTime.getText().toString();
         final String elaspedTime = elapsedTime.getText().toString();
         final int roundsCompleted = this.roundCurrent;
         final int roundsTotal = this.roundsTotal;
         final String workTime = Preferences.getWorkTime(this);
         final String restTime = Preferences.getRestTime(this);
-        final HistoryItem historyItem = new HistoryItem(id, date, "Rename Me", remainTitle, elaspedTime, roundsCompleted, roundsTotal, workTime, restTime);
+        final HistoryItem historyItem = new HistoryItem(id, date, "Rename Me", remainTitle, elaspedTime, roundsCompleted, roundsTotal, workTime, restTime, false);
 
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
@@ -311,20 +347,12 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         });
     }
 
-    private void addWorkoutToDatabase(final HistoryItem historyItem) {
+    private void updateItemToDatabase(final HistoryItem historyItem) {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 AppDatabase db = ((App) getApplicationContext()).getDB();
                 db.historyDao().insert(historyItem);
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((HistoryAdapter) recyclerView.getAdapter()).addItem(historyItem);
-                        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-                    }
-                });
             }
         });
     }
@@ -373,7 +401,16 @@ public class ServicedActivity extends Activity implements SensorEventListener {
             @Override
             public void run() {
                 AppDatabase db = ((App) getApplicationContext()).getDB();
-                db.historyDao().nukeTable();
+
+                List<HistoryItem> allItems = db.historyDao().getAllEntries();
+
+                for (HistoryItem item : allItems) {
+                    if(!item.isLocked()){
+                        db.historyDao().delete(item);
+                    }
+                }
+                loadDatabase();
+//                db.historyDao().nukeTable();
             }
         });
     }
@@ -413,7 +450,6 @@ public class ServicedActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
     @Override
@@ -425,6 +461,7 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         // Sets the hardware button to control music volume
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
+        hideView(resetLayer);
         roundCurrent = 0;
 
         loadPreferences(savedInstanceState);
@@ -433,9 +470,9 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         changeFabAppearance(Running.WORK);
 
         setViewColors(null);
-        hideView(resetLayer);
 
         initHistory();
+
     }
 
     @Override
@@ -461,11 +498,9 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         }
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
-
         connection = new RunnerServiceConnection();
     }
 
@@ -476,7 +511,9 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         if (proximity) {
             sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
-        if(isRunning) doBindService();
+        if(isRunning) {
+            doBindService();
+        }
     }
 
 
@@ -492,7 +529,6 @@ public class ServicedActivity extends Activity implements SensorEventListener {
     @Override
     protected void onStop() {
         super.onStop();
-
         try {
             getApplicationContext().unbindService(connection);
         } catch (IllegalArgumentException e) { /* EMPTY */ }
@@ -523,7 +559,15 @@ public class ServicedActivity extends Activity implements SensorEventListener {
     private void initHistory() {
         HistoryAdapter adapter = new HistoryAdapter(new ClickListener() {
             @Override
-            public void onClick(HistoryItem item) {
+            public void onClick(final HistoryItem item) {
+                HistoryViewerDialog viewer = new HistoryViewerDialog(ServicedActivity.this, item, new HistoryItemLockListener() {
+                    @Override
+                    public void onLockItme(boolean lock) {
+                        item.setLocked(lock);
+                        updateItemToDatabase(item);
+                    }
+                });
+                viewer.show();
             }
 
             @Override
@@ -578,52 +622,6 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         textViewRounds.setText(" " + roundCurrent + "/" + roundsTotal);
     }
 
-
-    private void setViewColors(@Nullable EffortLevel lvl) {
-        Boolean showQuotes = Preferences.showQuotes(this);
-        if (lvl == null) {
-            timerBackground.setBackgroundResource(R.drawable.timer_bg_primary);
-            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.colorMainBackgroundSecondary));
-
-        } else if (lvl == EffortLevel.HARD) {
-            timerBackground.setBackgroundResource(R.drawable.timer_bg_work);
-            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.md_green_300));
-            if (showQuotes)
-                timerMessage.setText(getRandomString(R.array.workQuotes));
-            else
-                timerMessage.setText(R.string.workDefaultMsg);
-
-            ++roundCurrent;
-            setRoundTextView();
-
-        } else if (lvl == EffortLevel.REST) {
-            timerBackground.setBackgroundResource(R.drawable.timer_bg_rest);
-            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.md_light_blue_300));
-            if (showQuotes)
-                timerMessage.setText(getRandomString(R.array.restQuotes));
-            else
-                timerMessage.setText(R.string.restDefaultMsg);
-
-        } else if (lvl == EffortLevel.EASY) {
-            timerBackground.setBackgroundResource(R.drawable.timer_bg_prep);
-            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.md_amber_200));
-            if (showQuotes)
-                timerMessage.setText(getRandomString(R.array.prepQuotes));
-            else
-                timerMessage.setText(R.string.prepDefaultMsg);
-        } else if (lvl == EffortLevel.NONE) {
-            timerBackground.setBackgroundResource(R.drawable.timer_bg_primary);
-            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.white));
-            timerMessage.setText(R.string.workoutComplete);
-        }
-
-        if (!showQuotes)
-            timerMessage.setTextSize(40);
-        else
-            TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(timerMessage, 20, 50, 5, TypedValue.COMPLEX_UNIT_SP);
-
-    }
-
     private String getRandomString(@ArrayRes int quotesArray) {
         String[] quotes = getResources().getStringArray(quotesArray);
         Random rand = new Random();
@@ -639,6 +637,13 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         outState.putLong("workTimeMillis", workTimeMillis);
         outState.putLong("restTimeMillis", restTimeMillis);
         outState.putString("timerRemaining", timerRemaining.getText().toString());
+
+        outState.putString("workoutTime", workoutTime.getText().toString());
+        outState.putString("elapsedTime", elapsedTime.getText().toString());
+
+        if(programBinder != null) {
+            outState.putBoolean("isPaused", programBinder.isPaused());
+        }
     }
 
     private void loadPreferences(Bundle bundle) {
@@ -648,25 +653,39 @@ public class ServicedActivity extends Activity implements SensorEventListener {
             proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         }
 
+        roundCurrent = 0;
+
         if(bundle != null) {
             isRunning = bundle.getBoolean("isRunning");
+            keepScreenOn(isRunning);
 
             if(isRunning) {
-                recyclerView.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);          // hide history
+                timerMessage.setVisibility(View.VISIBLE);       // show motivation quotes box - filled with text on exercise change
                 fabTimer.setOnTouchListener(fabTouchListener);
+                fabSettings.hide();
                 changeFabAppearance(Running.WORK);
-            } else if (!Preferences.showHistory(this))
-                recyclerView.setVisibility(View.GONE);
+                roundCurrent = bundle.getInt("roundCurrent") - 1;
+            } else {
+                if (!Preferences.showHistory(this))
+                    recyclerView.setVisibility(View.GONE);
+            }
 
-            roundCurrent = bundle.getInt("roundCurrent");
+            isPause = bundle.getBoolean("isPaused", false);
+            if(isPause) {
+                showView(resetLayer);
+                fabTimer.setOnTouchListener(null);
+            }
 
             workTimeMillis = bundle.getLong("workTimeMillis");
             restTimeMillis = bundle.getLong("restTimeMillis");
 
             timerRemaining.setText(bundle.getString("timerRemaining"));
 
+            workoutTime.setText(bundle.getString("workoutTime"));
+            elapsedTime.setText(bundle.getString("elapsedTime"));
+
         }else {
-            roundCurrent = 0;
             workTimeMillis = PickerPrefDialog.getMillis(Preferences.getWorkTime(this));
             restTimeMillis = PickerPrefDialog.getMillis(Preferences.getRestTime(this));
 
@@ -677,7 +696,6 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         prepEnabled = Preferences.isPrepEnabled(this);
 
         setDisplayViews();
-
 
         if(bundle == null) {
             WorkoutGroup program = ProgramDAOSqlite.getInstance(getApplicationContext()).getProgram(1, true);
@@ -706,18 +724,55 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         setRoundTextView();
 
         totalWorkoutTime = (workTimeMillis * roundsTotal) + (restTimeMillis * (roundsTotal - 1)) + (prepEnabled ? PREP_TIME_MILLI : 0);
-        workoutTime.setText(getElaspedTime(totalWorkoutTime));
         runTime = Commons.formatString(TimeUnit.MILLISECONDS.toMinutes(workTimeMillis), TimeUnit.MILLISECONDS.toSeconds(workTimeMillis) % 60);
         workPreviewText.setText(String.format(getString(R.string.work), runTime));
         String restTime = Commons.formatString(TimeUnit.MILLISECONDS.toMinutes(restTimeMillis), TimeUnit.MILLISECONDS.toSeconds(restTimeMillis) % 60);
         restPreviewText.setText(String.format(getString(R.string.rest), restTime));
 
-        timerRemaining.setText(prepEnabled ? getElaspedTime(PREP_TIME_MILLI) : runTime);
+        if(!isRunning) {
+            workoutTime.setText(getElaspedTime(totalWorkoutTime));
+            timerRemaining.setText(prepEnabled ? getElaspedTime(PREP_TIME_MILLI) : runTime);
+        }
+    }
+
+
+    private class RunnerServiceConnection implements ServiceConnection {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            programBinder = (ProgramBinder) service;
+            programBinder.registerCountDownObserver(countDownObserver);
+
+            if (programBinder.isActive()) {
+
+                // TODO: 09/02/2018 clean up the rounds couner
+
+                if(programBinder.getCurrentExercise().getEffortLevel().equals(EffortLevel.EASY)) {
+                    roundCurrent = 0;
+                }
+                if(programBinder.getCurrentExercise().getEffortLevel().equals(EffortLevel.REST)) {
+                    roundCurrent++;
+                }
+                setRoundTextView();
+                setViewColors(programBinder.getCurrentExercise().getEffortLevel());
+            } else {
+                Log.d(TAG, "programBinder.NOT Active: ");
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            programBinder = null;
+        }
+    }
+
+    public void doBindService() {
+        Intent serviceIntent = new Intent(this, ProgramRunService.class);
+        serviceIntent.putExtra(WorkoutMetaData.PROGRAM_ID_NAME, 1);
+        getApplicationContext().bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
     }
 
     private final CountDownObserver countDownObserver = new CountDownObserver() {
-
-        private long runCounter;
+        private long prepTime;
 
         @Override
         public void onTick(long exerciseMsRemaining, long programMsRemaining) {
@@ -726,7 +781,8 @@ public class ServicedActivity extends Activity implements SensorEventListener {
             timerRemaining.setText(Commons.formatString(mins, secs));
 
             workoutTime.setText(getElaspedTime(programMsRemaining - restTimeMillis));  // remove the last rest period
-            elapsedTime.setText(getElaspedTime(++runCounter * 1000));
+
+            elapsedTime.setText(getElaspedTime(totalWorkoutTime - programMsRemaining + restTimeMillis - prepTime));
         }
 
         @Override
@@ -734,8 +790,6 @@ public class ServicedActivity extends Activity implements SensorEventListener {
             if(roundCurrent == roundsTotal && exercise.getEffortLevel().equals(EffortLevel.REST)) {
                 Log.d(TAG, "onExerciseStart: ");
                 programBinder.stop();
-//                programBinder.();
-//                countDownObserver.onProgramFinish();
             } else
                 setViewColors(exercise.getEffortLevel());
         }
@@ -745,13 +799,15 @@ public class ServicedActivity extends Activity implements SensorEventListener {
             setRoundTextView();
             timerRemaining.setText("--:--");
 
-            showView(resetLayer);
-            fabTimer.hide();
+            lockOrientation();
+            if(isRunning) {
+                showView(resetLayer);
+                fabTimer.hide();
+            }
         }
 
         @Override
         public void onPause() {
-            showView(resetLayer);
         }
 
         @Override
@@ -761,7 +817,7 @@ public class ServicedActivity extends Activity implements SensorEventListener {
 
         @Override
         public void onStart() {
-            runCounter = 0;
+            prepTime = prepEnabled ? PREP_TIME_MILLI : -1000;
         }
 
         @Override
@@ -798,12 +854,40 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         snackbar.show();
     }
 
+    private void keepScreenOn(boolean keepOn) {
+        if (Preferences.stayAwake(this)) {
+            fabTimer.setKeepScreenOn(keepOn);
+//            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//            PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, getPackageName());
+            if(keepOn) {
+//                wakeLock.acquire();
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } else {
+//                wakeLock.release();
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+        }
+    }
+
+    private void lockOrientation() {
+        int currentOrientation = getResources().getConfiguration().orientation;
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE)
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        else
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+    }
+
+    private void unlockOrientation() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    }
+
+
     private void removeAllItems() {
 
         AlertDialog.Builder dlg = new AlertDialog.Builder(this)
                 .setIcon(R.drawable.ic_delete_all)
-                .setTitle("Remove All Entries?")
-                .setMessage("Do you really want to delete all entries? You can not undo this")
+                .setTitle("Remove Unlocked Entries?")
+                .setMessage("This will delete all unlocked entries? You can not undo this")
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -820,5 +904,85 @@ public class ServicedActivity extends Activity implements SensorEventListener {
                     }
                 });
         dlg.show();
+    }
+
+
+    private void bgAnimation(@Nullable EffortLevel lvl) {
+        if(lvl == null) {
+            if(bgAnimation != null)
+                bgAnimation.stop();
+            bgAnimation = (AnimationDrawable) timerBackground.getBackground();
+            bgAnimation.setExitFadeDuration(6000);
+        }
+        if (bgAnimation != null)
+            if(!bgAnimation.isRunning() && lvl == null) {
+                bgAnimation.start();
+            } else {
+                bgAnimation.stop();
+                bgAnimation = null;
+            }
+    }
+
+//   private Painter bgPaint;
+
+
+    private void setViewColors(@Nullable EffortLevel lvl) {
+        Boolean showQuotes = Preferences.showQuotes(this);
+
+//        if(bgPaint != null)
+//            bgPaint.stopAnimating();
+
+        if (lvl == null) {
+            timerBackground.setBackgroundResource(R.drawable.timer_bg_primary);
+            timerBackground.setBackgroundResource(R.drawable.animation_list);
+//            bgPaint = new Painter(Painter.getRandColor());
+//            bgPaint.animate(timerBackground, Painter.getRandColor());
+
+            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.colorMainBackgroundSecondary));
+
+        } else if (lvl == EffortLevel.HARD) {
+            timerBackground.setBackgroundResource(R.drawable.timer_bg_work);
+            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.md_green_300));
+            if (showQuotes)
+                timerMessage.setText(getRandomString(R.array.workQuotes));
+            else
+                timerMessage.setText(R.string.workDefaultMsg);
+
+            ++roundCurrent;
+            setRoundTextView();
+
+//            bgPaint = new Painter(ContextCompat.getColor(this, R.color.md_light_green_700));
+//            bgPaint.animate(timerBackground, ContextCompat.getColor(this, R.color.md_green_700));
+
+
+        } else if (lvl == EffortLevel.REST) {
+            timerBackground.setBackgroundResource(R.drawable.timer_bg_rest);
+            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.md_light_blue_300));
+            if (showQuotes)
+                timerMessage.setText(getRandomString(R.array.restQuotes));
+            else
+                timerMessage.setText(R.string.restDefaultMsg);
+
+//            bgPaint = new Painter(ContextCompat.getColor(this, R.color.md_light_blue_600));
+//            bgPaint.animate(timerBackground, ContextCompat.getColor(this, R.color.md_blue_700));
+
+        } else if (lvl == EffortLevel.EASY) {
+            timerBackground.setBackgroundResource(R.drawable.timer_bg_prep);
+            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.md_amber_200));
+            if (showQuotes)
+                timerMessage.setText(getRandomString(R.array.prepQuotes));
+            else
+                timerMessage.setText(R.string.prepDefaultMsg);
+
+//            bgPaint = new Painter(ContextCompat.getColor(this, R.color.md_amber_400));
+//            bgPaint.animate(timerBackground, ContextCompat.getColor(this, R.color.md_amber_600));
+
+        } else if (lvl == EffortLevel.NONE) {
+            timerBackground.setBackgroundResource(R.drawable.timer_bg_primary);
+            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.white));
+            timerMessage.setText(R.string.workoutComplete);
+        }
+
+        bgAnimation(lvl);
     }
 }

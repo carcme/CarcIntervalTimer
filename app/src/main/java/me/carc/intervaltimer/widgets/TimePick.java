@@ -64,7 +64,7 @@ public class TimePick extends FrameLayout {
     private boolean mIsAm;
 
     // ui components
-    private final NumberPicker mHourPicker;
+//    private final NumberPicker mHourPicker;
     private final NumberPicker mMinutePicker;
     private final NumberPicker mSecondPicker;
     private final Button mAmPmButton;
@@ -103,8 +103,8 @@ public class TimePick extends FrameLayout {
         inflater.inflate(R.layout.time_picker_widget, this, true);
 
         // hour
-        mHourPicker = findViewById(R.id.hour);
-        mHourPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+//        mHourPicker = findViewById(R.id.hour);
+/*        mHourPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
 
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -123,7 +123,7 @@ public class TimePick extends FrameLayout {
                 }
                 onTimeChanged();
             }
-        });
+        });*/
 
         // digits of minute
         mMinutePicker = findViewById(R.id.minute);
@@ -208,7 +208,7 @@ public class TimePick extends FrameLayout {
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         mMinutePicker.setEnabled(enabled);
-        mHourPicker.setEnabled(enabled);
+//        mHourPicker.setEnabled(enabled);
         mAmPmButton.setEnabled(enabled);
     }
 
@@ -347,7 +347,7 @@ public class TimePick extends FrameLayout {
 
     @Override
     public int getBaseline() {
-        return mHourPicker.getBaseline();
+        return mMinutePicker.getBaseline();
     }
 
     /**
@@ -360,13 +360,15 @@ public class TimePick extends FrameLayout {
             if (currentHour > 12) currentHour -= 12;
             else if (currentHour == 0) currentHour = 12;
         }
-        mHourPicker.setValue(currentHour);
+//        mHourPicker.setValue(currentHour);
         mIsAm = mCurrentHour < 12;
         mAmPmButton.setText(mIsAm ? mAmText : mPmText);
         onTimeChanged();
     }
 
     private void configurePickerRanges() {
+        mAmPmButton.setVisibility(View.GONE);
+/*
         if (mIs24HourView) {
             mHourPicker.setMinValue(0);
             mHourPicker.setMaxValue(23);
@@ -378,6 +380,7 @@ public class TimePick extends FrameLayout {
             mHourPicker.setFormatter(null);
             mAmPmButton.setVisibility(View.VISIBLE);
         }
+*/
     }
 
     private void onTimeChanged() {

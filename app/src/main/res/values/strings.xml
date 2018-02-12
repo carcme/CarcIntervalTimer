@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Carc Interval Timer</string>
     <string name="app_settings_name">Settings</string>
+    
 
     <string name="time_set">Set time</string>
     <string name="time">Time : </string>
@@ -90,7 +91,12 @@
     <string name="history_item_times" formatted="false">Times: %s / %s</string>
     <string name="history_item_elasped_time" formatted="false">Total Time: %s</string>
     <string name="history_item_date" formatted="false">When: %s</string>
+    <string name="history_item_duraton" formatted="false">Duration: %s</string>
     <string name="added_to_database">Workout added to database</string>
+
+    <string name="roundsOf" formatted="false">%d of %d</string>
+
+    <string name="workout_viewer_summary">This is a break down of your workout</string>
 
 
 
@@ -122,6 +128,7 @@
     <string name="effort_easy">Easy</string>
     <string name="effort_rest">Rest</string>
     <string name="effort_none">n/a</string>
+    <string name="lock_the_entry_in_the_database">Lock the entry in the database</string>
 
 
 </resources>

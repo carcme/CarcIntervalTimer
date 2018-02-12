@@ -30,8 +30,6 @@ public class Preferences {
 
     final static String REPORT_BUG = "report_bug";
 
-
-
     public static boolean getPref(Context context, String pref, boolean defValue) {
         SharedPreferences settings = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         return settings.getBoolean(pref, defValue);
@@ -54,9 +52,21 @@ public class Preferences {
         return value.getBoolean(PREP_TIME_ENABLED, true);
     }
 
+    public static void setWorkTime(Context context, String value) {
+        SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        prefs.putString(WORK_TIME, value);
+        prefs.commit();
+    }
+
     public static String getWorkTime(Context context) {
         SharedPreferences value = PreferenceManager.getDefaultSharedPreferences(context);
         return value.getString(WORK_TIME, context.getString(R.string.default_work_time_value));
+    }
+
+    public static void setRestTime(Context context, String value) {
+        SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        prefs.putString(REST_TIME, value);
+        prefs.commit();
     }
 
     public static String getRestTime(Context context) {
@@ -67,6 +77,12 @@ public class Preferences {
     public static String getWarningTime(Context context) {
         SharedPreferences value = PreferenceManager.getDefaultSharedPreferences(context);
         return value.getString(WARNING_TIME, context.getString(R.string.warn_time_values_default));
+    }
+
+    public static void setRoundsCount(Context context, String value) {
+        SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        prefs.putString(ROUNDS_CNT, value);
+        prefs.commit();
     }
 
     public static String getRoundsCount(Context context) {

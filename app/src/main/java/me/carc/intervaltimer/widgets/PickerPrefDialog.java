@@ -35,7 +35,6 @@ public class PickerPrefDialog extends DialogPreference {
             return 0;
     }
 
-
     private int getMinute(String time) {
         String[] pieces = time.split(":");
         if(pieces.length > 2)
@@ -77,6 +76,7 @@ public class PickerPrefDialog extends DialogPreference {
         setPositiveButtonText(R.string.set);
         setNegativeButtonText(R.string.cancel);
     }
+
 
     @Override
     protected View onCreateDialogView() {

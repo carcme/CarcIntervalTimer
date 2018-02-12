@@ -96,7 +96,7 @@ public class Commons {
     }
 
     public static String readableDate(long timestamp) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yy", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yy:hh.mm.ss", Locale.getDefault());
         if(timestamp != 0) {
             return  sdf.format(new Date(timestamp));
         }

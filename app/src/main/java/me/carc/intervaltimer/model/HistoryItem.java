@@ -39,8 +39,12 @@ public class HistoryItem {
     @ColumnInfo(name = "restTime")
     private String restTime;
 
+    @ColumnInfo(name = "locked")
+    private boolean locked;
 
-    public HistoryItem(int keyID, String date, String title, String timeRemaining, String elaspedTime, int roundsCompleted, int roundsTotal, String workTime, String restTime) {
+
+    public HistoryItem(int keyID, String date, String title, String timeRemaining, String elaspedTime,
+                       int roundsCompleted, int roundsTotal, String workTime, String restTime, boolean locked) {
         this.keyID = keyID;
         this.date = date;
         this.title = title;
@@ -50,6 +54,7 @@ public class HistoryItem {
         this.roundsTotal = roundsTotal;
         this.workTime = workTime;
         this.restTime = restTime;
+        this.locked = locked;
     }
 
 
@@ -80,4 +85,11 @@ public class HistoryItem {
 
     public String getRestTime() { return restTime; }
     public void setRestTime(String restTime) { this.restTime = restTime;}
+
+    public boolean isLocked() {
+        return locked;
+    }
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
 }

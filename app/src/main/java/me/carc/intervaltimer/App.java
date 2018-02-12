@@ -69,7 +69,7 @@ public class App extends Application {
      */
     private AppDatabase initDB() {
         return Room.databaseBuilder(getApplicationContext(), AppDatabase.class, CARC_DATABASE_NAME)
-                .fallbackToDestructiveMigration()
+                .addMigrations(AppDatabase.MIGRATION_2_3)
                 .build();
     }
 

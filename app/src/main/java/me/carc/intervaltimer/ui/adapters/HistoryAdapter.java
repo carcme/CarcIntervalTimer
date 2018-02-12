@@ -28,10 +28,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     private List<HistoryItem> mItems = new ArrayList<>();
     private ClickListener clickListener;
 
-    public HistoryAdapter(ClickListener listener){
+    public HistoryAdapter(ClickListener listener) {
         clickListener = listener;
     }
-    
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.history_item, parent, false);
@@ -44,14 +44,26 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         Context ctx = holder.historyCardView.getContext();
 
-        holder.historyDate.setText(data.getDate());
-        holder.historyElaspedTime.setText(data.getElaspedTime());
+
+        final String date = String.format(Locale.US, ctx.getString(R.string.history_item_date), data.getDate());
+        holder.historyDate.setText(date);
+
+        final String time = String.format(Locale.US,ctx.getString(R.string.history_item_duraton), data.getElaspedTime());
+        holder.historyElaspedTime.setText(time);
 
         holder.historyRounds.setText(String.format(Locale.US,
                 ctx.getString(R.string.history_item_rounds), data.getRoundsCompleted(), data.getRoundsTotal()));
 
         holder.historyWorkRest.setText(String.format(Locale.US,
                 ctx.getString(R.string.history_item_times), data.getWorkTime(), data.getRestTime()));
+
+
+        holder.historyCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListener.onClick(data);
+            }
+        });
 
         holder.historyCardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -73,7 +85,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     public void addItem(HistoryItem item) {
         mItems.add(item);
-        notifyItemChanged(mItems.size()-1);
+        notifyItemChanged(mItems.size() - 1);
     }
 
     public void addItems(List<HistoryItem> items) {
@@ -102,11 +114,16 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.historyDate)         TextView historyDate;
-        @BindView(R.id.historyElaspedTime)  TextView historyElaspedTime;
-        @BindView(R.id.historyRounds)       TextView historyRounds;
-        @BindView(R.id.historyWorkRest)     TextView historyWorkRest;
-        @BindView(R.id.historyCardView)     CardView historyCardView;
+        @BindView(R.id.historyDate)
+        TextView historyDate;
+        @BindView(R.id.historyElaspedTime)
+        TextView historyElaspedTime;
+        @BindView(R.id.historyRounds)
+        TextView historyRounds;
+        @BindView(R.id.historyWorkRest)
+        TextView historyWorkRest;
+        @BindView(R.id.historyCardView)
+        CardView historyCardView;
 
         ViewHolder(View itemView) {
             super(itemView);

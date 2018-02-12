@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="pref_screen">
+
     <PreferenceCategory
         android:title="Timer Settings">
 
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prep_time_key"
-            android:summaryOn="@string/prep_time_summary"
             android:summaryOff="@string/prep_time_summary_disabled"
+            android:summaryOn="@string/prep_time_summary"
             android:title="@string/prep_time_title"/>
 
         <me.carc.intervaltimer.widgets.PickerPrefDialog
@@ -32,14 +35,14 @@
             android:defaultValue="9"
             android:key="number_rounds_key"
             android:numeric="integer"
-            android:title="@string/num_round_title"
-            android:summary="@string/num_round_summary"/>
+            android:summary="@string/num_round_summary"
+            android:title="@string/num_round_title"/>
 
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="quotes_key"
-            android:summaryOn="@string/quotes_summary"
             android:summaryOff="@string/quotes_summary_disabled"
+            android:summaryOn="@string/quotes_summary"
             android:title="@string/quotes_title"/>
 
         <CheckBoxPreference
@@ -57,29 +60,29 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="keep_awake_key"
-            android:summaryOn="@string/keep_awake_summary"
             android:summaryOff="@string/keep_awake_summary_disbled"
+            android:summaryOn="@string/keep_awake_summary"
             android:title="@string/keep_awake_title"/>
 
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="proximity_sensor_key"
-            android:summaryOn="@string/proximity_sensor_summary"
             android:summaryOff="@string/proximity_sensor_summary_disabled"
+            android:summaryOn="@string/proximity_sensor_summary"
             android:title="@string/proximity_sensor_title"/>
 
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="mute_key"
-            android:summaryOn="@string/mute_summary_on"
             android:summaryOff="@string/mute_summary_off"
+            android:summaryOn="@string/mute_summary_on"
             android:title="@string/mute_title"/>
 
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="voice_key"
-            android:summaryOn="@string/voice_summary_on"
             android:summaryOff="@string/voice_summary_off"
+            android:summaryOn="@string/voice_summary_on"
             android:title="@string/voice_title"/>
 
         <CheckBoxPreference

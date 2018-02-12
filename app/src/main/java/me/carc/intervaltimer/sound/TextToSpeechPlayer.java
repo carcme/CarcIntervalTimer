@@ -23,35 +23,40 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.SoundPool;
+import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.UtteranceProgressListener;
+import android.speech.tts.Voice;
 import android.support.annotation.ArrayRes;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 import me.carc.intervaltimer.R;
 import me.carc.intervaltimer.model.EffortLevel;
 import me.carc.intervaltimer.model.Exercise;
 import me.carc.intervaltimer.settings.Preferences;
+import me.carc.intervaltimer.utils.Network;
 
 
 public class TextToSpeechPlayer implements SoundPlayer, OnInitListener {
+
+	private final String UTTER_ID = "UTTER_ID";
 
 	private interface UtteranceEndListener {
 		void onUtteranceEnded();
 	}
 
 	private AudioManager mAudioManager;
+	private final TextToSpeech textToSpeech;
+	private Bundle speechBundle = new Bundle();
 
 	private final Queue<UtteranceEndListener> endListeners = new LinkedList<>();
-	private final HashMap<String, String> speechParams = new HashMap<String, String>();
-	private final TextToSpeech textToSpeech;
 
 	private SoundPool mSoundPool;
 	private Vibrator mVibrator;
@@ -59,16 +64,18 @@ public class TextToSpeechPlayer implements SoundPlayer, OnInitListener {
 	private long[] vPattern = {0, 300, 100, 300, 100, 300};
 	private int[] vAmp = {0, 200, 0, 200, 0, 200};
 
-
 	private boolean init = false;
-	private String missedExText = null;
+	private String missedText = null;
 	private boolean playVoice, playSounds, vibrate;
-	private Context context;
+	private Context mContext;
+
+	private Set<Voice> voices;
+
 
 
 	public TextToSpeechPlayer(Context context, AudioManager audioManager) {
 		this.mAudioManager = audioManager;
-		this.context = context;
+		this.mContext = context;
 
 		// Audio Beeps
 		AudioAttributes attributes = new AudioAttributes.Builder()
@@ -84,12 +91,12 @@ public class TextToSpeechPlayer implements SoundPlayer, OnInitListener {
 
 		// TTL
 		textToSpeech = new TextToSpeech(context, this);
-		textToSpeech.setSpeechRate(1.3f);
+		textToSpeech.setSpeechRate(1.0f);
 		textToSpeech.setOnUtteranceProgressListener(utteranceListener);
 
-		speechParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_MUSIC));
-		// mandatory to listen to utterances even though we don't care about the ID.
-		speechParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "id");
+		speechBundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
+		speechBundle.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, UTTER_ID);
+		speechBundle.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, getVolume());
 
 		playSounds = Preferences.useSounds(context);
 		playVoice = Preferences.useVoices(context);
@@ -130,6 +137,11 @@ public class TextToSpeechPlayer implements SoundPlayer, OnInitListener {
 		}
 	}
 
+	@Override
+	public void playWarningBeep() {
+		playSingleBeepSound();
+	}
+
 
 	@Override
 	public void playExerciseStart(Exercise exercise) {
@@ -138,7 +150,7 @@ public class TextToSpeechPlayer implements SoundPlayer, OnInitListener {
 		if(exercise.getEffortLevel().equals(EffortLevel.HARD))
 			text = getRandomString(R.array.workTTS);
 		if(exercise.getEffortLevel().equals(EffortLevel.EASY))
-			text = getRandomString(R.array.prepTTS);
+			text = getRandomString(R.array.prepQuotes);
 		else if(exercise.getEffortLevel().equals(EffortLevel.REST))
 			text = getRandomString(R.array.restTTS);
 
@@ -146,26 +158,15 @@ public class TextToSpeechPlayer implements SoundPlayer, OnInitListener {
 			if (init) {
 				speak(text);
 			} else {
-				missedExText = text;
+				missedText = text;
 			}
 		}
 	}
 
-	private void speak(String message) {
-		if(playVoice)
-			textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, speechParams);
-	}
-
-    @Override
-    public void playWarningBeep() {
-        playSingleBeepSound();
-    }
-
     @Override
 	public void playEnd() {
-		if(playVoice)
-			textToSpeech.speak(getRandomString(R.array.doneTTS), TextToSpeech.QUEUE_FLUSH, speechParams);
-
+	if(playVoice)
+			speak(getRandomString(R.array.doneTTS));
 /*
 		new Handler().postDelayed(new Runnable() {
 			@Override
@@ -176,6 +177,28 @@ public class TextToSpeechPlayer implements SoundPlayer, OnInitListener {
 */
 	}
 
+	private void speak(String message) {
+
+		CharSequence[] msg = message.split("\\.");
+		boolean firstLine = true;
+		for (CharSequence text : msg) {
+			if(firstLine)
+				textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, speechBundle, UTTER_ID);
+			else
+				textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, speechBundle, UTTER_ID);
+
+			firstLine = false;
+		}
+	}
+
+	public void speak(Voice voice, String message, float pitch, float rate) {
+		if(Network.connected(mContext)) {
+			textToSpeech.setVoice(voice);
+			textToSpeech.setPitch(pitch);
+			textToSpeech.setSpeechRate(rate);
+		}
+		speak(message);
+	}
 
 	@Override
 	public void cleanUp() {
@@ -191,13 +214,21 @@ public class TextToSpeechPlayer implements SoundPlayer, OnInitListener {
 		}
 	}
 
-
 	@Override
 	public void onInit(int status) {
 		if (status == TextToSpeech.SUCCESS) {
 			init = true;
-			if (missedExText != null) {
-				speak(missedExText);
+
+			// TODO: 12/02/2018 add voice selection to prefereences
+//			ArrayList<Voice> voices = new ArrayList<>(textToSpeech.getVoices());
+//			for (Voice voice : voices) {
+//				if(voice.getName().contains("us") && voice.getName().contains("male") && !voice.getName().contains("female")) {
+//					textToSpeech.setVoice(voice);
+//					break;
+//				}
+//			}
+			if (missedText != null) {
+				speak(missedText);
 			}
 		} else
 			playVoice = false;
@@ -223,7 +254,6 @@ public class TextToSpeechPlayer implements SoundPlayer, OnInitListener {
 
 		@Override
 		public void onDone(String utteranceId) {
-			abandon();
 		}
 
 		@Override
@@ -247,7 +277,7 @@ public class TextToSpeechPlayer implements SoundPlayer, OnInitListener {
 	};
 
 	private String getRandomString(@ArrayRes int quotesArray) {
-		String[] quotes = context.getResources().getStringArray(quotesArray);
+		String[] quotes = mContext.getResources().getStringArray(quotesArray);
 		Random rand = new Random();
 		int i = rand.nextInt(quotes.length);
 		return quotes[i];

@@ -151,6 +151,7 @@ public class ProgramRunService extends Service {
 			programRunner.stop();
 			programRunner = null;
 		}
+        stopSelf(NOTIFICATION_ID);
 	}
 
 	private void cleanUp() {

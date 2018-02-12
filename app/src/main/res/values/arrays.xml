@@ -21,13 +21,6 @@
     <string name="warn_time_values_default" translatable="false">3</string>
 
 
-    <array name="autosize_text_sizes">
-        <item>16sp</item>
-        <item>20sp</item>
-        <item>30sp</item>
-        <item>40sp</item>
-    </array>
-
     <string-array name="prepTTS">
         <item>Get ready</item>
         <item>Hope you\'ve warmed up</item>
@@ -36,36 +29,38 @@
         <item>Lets go for your personal best</item>
         <item>Time to kick ass and chew bubble gum… and I\'m all outta gum.</item>
         <item>I will count to three. There will not be a four</item>
-        <item>Come with me if you want to live!</item>
         <item>I was born ready!</item>
         <item>Well Hello Mister Fancypants</item>
         <item>Yippee kai yay, muddy funster</item>
-        <item>Now, young Skywalker, you will die</item>
 
-<!--
-        <item>empty</item>
-        <item>empty</item>
-        <item>empty</item>
-        <item>empty</item>
-        <item>empty</item>
--->
-
+        <item>When you\'ve got something to prove, there\'s nothing greater than a challenge</item>
+        <item>Age is no barrier. It’s a limitation you put on your mind</item>
+        <item>Without self-discipline, success is impossible</item>
+        <item>If you can believe it, the mind can achieve it</item>
+        <item>Make each day your masterpiece</item>
+        <item>You miss 100 percent of the shots you don’t take</item>
+        <item>It\'s not whether you get knocked down; it\'s whether you get up</item>
+        <item>Every accomplishment starts with the decision to try</item>
+        <item>Push yourself. No one else will do it for you</item>
+        <item>Improvement begins at the end of your comfort zone</item>
+        <item>Look in the mirror. That’s your competition</item>
+        <item>Fear less. Do More. Get outside and get after it</item>
+        <item>Success trains. Failure complains</item>
+        <item>Don’t make excuses. Make results</item>
+        <item>Slow progress is still progress</item>
+        <item>ZombieLand Rule #18. Limber Up</item>
     </string-array>
 
     <string-array name="workTTS">
-        <item>It\'s all in the reflexes</item>
-        <item>Yippee kai yay, muddy funster</item>
+
         <item>Time to kick ass and chew bubble gum… and I\'m all outta gum.</item>
-        <item>COME GET SOME!!!</item>
         <item>Do, or do not. There is no try</item>
-        <item>Gonna rip \'em a new one</item>
+        <item>Gonna rip them a new one</item>
         <item>Let\'s rock</item>
         <item>What are you waiting for? Christmas?</item>
-        <item>Get to the chopper!</item>
         <item>I love the smell of sweat in the morning</item>
-        <item>Looks like nothing to me</item>
+        <item>It doesn\'t look like anything to me</item>
         <item>It\'s clobberin\' time</item>
-        <item>Run. Or I will taunt you a second time</item>
         <item>Cocked, locked, and ready to rock</item>
         <item>Time to go hard or go home</item>
         <item>Get your arse in gear</item>
@@ -73,9 +68,38 @@
         <item>Go… Go… Go</item>
         <item>Don’t make excuses. Make results</item>
         <item>Run Yasmin, run. Run like the wind</item>
-        <item>Time to give 100 percent</item>
         <item>Muscles…Use them or lose them</item>
-
+        <item>Come on you pansy</item>
+        <item>Get back to it, you slacker!</item>
+        <item>Most people never run far enough on their first wind to find out they’ve got a second</item>
+        <item>Continuous effort, not strength or intelligence, is the key to unlocking potential</item>
+        <item>The difference between impossible and possible is determination</item>
+        <item>A trophy carries dust. Memories last forever</item>
+        <item>Never give up. Never give in</item>
+        <item>Persistence turns failure into achievement</item>
+        <item>Set your goals high, and don’t stop till you get there</item>
+        <item>Your greatest enemy lives between your own ears</item>
+        <item>Champions keep going until they get it right</item>
+        <item>If you fail to prepare, you’re prepared to fail</item>
+        <item>The road to Easy Street goes through the sewer</item>
+        <item>The more difficult the victory, the greater the achievement</item>
+        <item>Nobody regretted giving their best</item>
+        <item>Your biggest opponent isn’t the other guy. It’s human nature</item>
+        <item>Win If You Can, Lose If You Must, But NEVER QUIT!</item>
+        <item>Just keep going. Everybody gets better if they keep at it</item>
+        <item>Push yourself! Don’t give an inch until the final buzzer</item>
+        <item>Pain is temporary</item>
+        <item>It ain’t over till it’s over</item>
+        <item>You’re never a loser until you quit trying</item>
+        <item>You don’t always get what you wish for. You get what you work for</item>
+        <item>All things are difficult before they\'re easy</item>
+        <item>Sweat is Fat Crying</item>
+        <item>Better Sore Than Sorry</item>
+        <item>Exercise. Zombies will eat the slow ones first</item>
+        <item>ZombieLand Rule #1. Cardio</item>
+        <item>ZombieLand Rule #20. It’s a marathon, not a sprint. Unless it\'s a sprint. then sprint</item>
+        <item>You have a choice. You can throw in the towel, or you can use it to wipe the sweat off of your face</item>
+        <item>Some of the world\'s greatest feats were accomplished by people not smart enough to know they were impossible</item>
     </string-array>
 
     <string-array name="restTTS">
@@ -83,34 +107,46 @@
         <item>Get your breath back</item>
         <item>Have a rest and then do it all again</item>
         <item>Pain is temporary</item>
-        <item>Get back to it, you slacker!</item>
         <item>Looks like cleanup on aisle four</item>
         <item>Ooh, that\'s gotta hurt</item>
         <item>Piece of Cake</item>
-        <item>Sometimes, I even amaze myself</item>
         <item>Suck it down!</item>
         <item>That\'s gonna leave a mark</item>
-        <item>Yeah, piece of cake!</item>
         <item>I make this look good</item>
-        <item>Gimme a Jack and Coke anyday!</item>
         <item>Just a flesh wound</item>
         <item>Tis but a scratch</item>
-        <item>Come on you pansy</item>
         <item>That hurt you more than it hurt me</item>
-        <item>Help me, Obi-Wan Kenobi. You\’re my only hope</item>
 
+        <item>It’s not the will to win that matters, everyone has that. It’s the will to prepare to win that matters</item>
+        <item>The will to win is important, but the will to prepare is vital</item>
+        <item>Adversity cause some men to break; others to break records</item>
+        <item>Never give up! Failure is the first step to succeeding</item>
+        <item>Gold medals are made of sweat, determination and a hard to find alloy called guts</item>
+        <item>Sport doesn’t build character, it reveals it</item>
+        <item>Always make a total effort, even when the odds are against you</item>
+        <item>Success is where preparation and opportunity meet</item>
+        <item>Remember that guy that gave up? Neither does anyone else</item>
+        <item>It’s a slow process. Quitting won’t speed it up</item>
+        <item>I may not be there yet, but I’m closer than I was yesterday</item>
+        <item>It never gets easier. You just get better</item>
+        <item>Falling down is how we grow. Staying down is how we die</item>
+        <item>Losers quit when they are tired. Winners quit when they’ve won</item>
+        <item>No matter how slow you go, you are still lapping everybody on the couch</item>
+        <item>The pain you feel today will be strength you feel tomorrow</item>
+        <item>Just do it. Then do it again</item>
+        <item>Sore. The most satisfying pain</item>
+        <item>Excuses burn zero calories</item>
+        <item>You are the creator of your own destiny</item>
+        <item>Your future self will thank you for today</item>
+        <item>Do a little more each day than you think you possibly can</item>
     </string-array>
 
     <string-array name="doneTTS">
         <item>And you\'re done</item>
         <item>You\'re finished… well done</item>
-        <item>Congratulation. Shower time!</item>
-        <item>Damn… I\'m looking good!</item>
+        <item>Congratulations. Time for a shower!</item>
         <item>Those that did well, well done. Those that didn\'t… must try harder!</item>
-        <item>Let do get you out of those wet clothes baby!</item>
-        <item>Welcome to Cool\'s-Ville, Population: Me</item>
-        <item>Dear diary… Jackpot!</item>
-
+        <item>Welcome to Finish-Ville. Population: You</item>
     </string-array>
 
 
@@ -121,7 +157,7 @@
         <item>If you can believe it, the mind can achieve it</item>
         <item>Make each day your masterpiece</item>
         <item>You miss 100 percent of the shots you don’t take</item>
-        <item>It’s not whether you get knocked down; it’s whether you get up</item>
+        <item>It\'s not whether you get knocked down; it\'s whether you get up</item>
         <item>Every accomplishment starts with the decision to try</item>
         <item>Push yourself. No one else will do it for you</item>
         <item>Improvement begins at the end of your comfort zone</item>
@@ -141,8 +177,8 @@
         <item>Never give up. Never give in</item>
         <item>Persistence turns failure into achievement</item>
         <item>Set your goals high, and don’t stop till you get there</item>
-        <item>Make sure your worst enemy doesn’t live between your own two ears</item>
-        <item>Champions keep playing until they get it right</item>
+        <item>Your greatest enemy lives between your own ears</item>
+        <item>Champions keep going until they get it right</item>
         <item>If you fail to prepare, you’re prepared to fail</item>
         <item>The road to Easy Street goes through the sewer</item>
         <item>The more difficult the victory, the greater the achievement</item>
@@ -175,7 +211,7 @@
         <item>Always make a total effort, even when the odds are against you</item>
         <item>Success is where preparation and opportunity meet</item>
         <item>Remember that guy that gave up? Neither does anyone else</item>
-        <item>It’s a slow process, but quitting won’t speed it up</item>
+        <item>It’s a slow process. Quitting won’t speed it up</item>
         <item>I may not be there yet, but I’m closer than I was yesterday</item>
         <item>It never gets easier. You just get better</item>
         <item>Falling down is how we grow. Staying down is how we die</item>

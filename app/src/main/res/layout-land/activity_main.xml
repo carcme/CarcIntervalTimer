@@ -6,104 +6,122 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/black"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.ServicedActivity">
 
     <RelativeLayout
         android:id="@+id/timerBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/workPreviewText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginStart="@dimen/margin_standard"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            tools:text="Work: 88:88"/>
-
-        <TextView
-            android:id="@+id/workoutTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_standard"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/workPreviewText"
-            android:gravity="center|end"
-            android:textSize="20sp"
-            tools:text="Workout Time"/>
-
-        <TextView
-            android:id="@+id/restPreviewText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            tools:text="Rest: 00:33"/>
-
-
-        <TextView
-            android:id="@+id/elapsedTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/restPreviewText"
-            android:gravity="center|end"
-            android:textSize="20sp"
-            tools:text="Elapsed Time"/>
-
         <LinearLayout
-            android:id="@+id/round_panel"
-            android:layout_width="wrap_content"
+            android:id="@+id/workSettingsPanel"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:orientation="vertical"
-            android:padding="6dp">
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:paddingEnd="@dimen/margin_standard"
+            android:paddingStart="@dimen/margin_standard"
+            android:weightSum="3">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/round"
-                android:textSize="24sp"
-                />
 
-            <TextView
-                android:id="@+id/round_number"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/workPanel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="24sp"
-                tools:text="12/12"/>
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/workPreviewText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Work: 88:88"/>
+
+                <TextView
+                    android:id="@+id/workoutTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    tools:text="Workout"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/roundPanel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/round"
+                    android:textSize="24sp"/>
+
+                <TextView
+                    android:id="@+id/round_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    tools:text="12/12"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/restPanel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/restPreviewText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    tools:text="Rest: 88:88"/>
+
+                <TextView
+                    android:id="@+id/elapsedTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:textSize="20sp"
+                    tools:text="Elapsed"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/time_panel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="2"
-            android:layout_below="@+id/round_panel"
+            android:layout_below="@+id/workSettingsPanel"
             android:layout_marginBottom="50dp"
             android:background="@android:color/transparent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
-                <TextView
+                <me.carc.intervaltimer.widgets.AutoResizeTextView
                     android:id="@+id/timerMessage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/margin_small"
                     android:layout_marginEnd="@dimen/margin_small"
+                    android:layout_marginStart="@dimen/margin_standard"
                     android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center_horizontal"
-                    android:textSize="30sp"
+                    android:textSize="100sp"
                     android:visibility="gone"
                     tools:text="It’s not the will to win that matters, everyone has that. It’s the will to prepare to win that matters"/>
 
@@ -111,9 +129,9 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/margin_standard"
-                    android:layout_marginEnd="@dimen/margin_small"
                     android:layout_marginBottom="@dimen/margin_settings_clearance"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:layout_marginStart="@dimen/margin_standard"
                     android:scrollbars="none"
                     tools:visibility="visible"/>
 
@@ -123,8 +141,8 @@
                 android:id="@+id/timerRemaining"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_small"
                 android:layout_marginEnd="@dimen/margin_standard"
+                android:layout_marginStart="@dimen/margin_small"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/initial_time"
@@ -139,6 +157,7 @@
         android:id="@+id/resetLayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="visible"
         tools:visibility="gone">
 
         <ImageView
@@ -193,13 +212,13 @@
         android:layout_height="@dimen/fab_space"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/margin_small"
-        app:layout_anchor="@id/fabTimer"
         app:donut_circle_starting_degree="270"
         app:donut_finished_color="@color/md_red_700"
         app:donut_finished_stroke_width="11dp"
         app:donut_progress="0"
         app:donut_text=""
         app:donut_unfinished_color="@android:color/transparent"
+        app:layout_anchor="@id/fabTimer"
         app:layout_anchorGravity="bottom|end"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -55,13 +55,14 @@ import me.carc.intervaltimer.alarm.AlarmHelper;
 import me.carc.intervaltimer.db.AppDatabase;
 import me.carc.intervaltimer.model.HistoryItem;
 import me.carc.intervaltimer.model.WorkoutSchedule;
-import me.carc.intervaltimer.sound.SoundServices;
 import me.carc.intervaltimer.settings.Preferences;
 import me.carc.intervaltimer.settings.SettingsActivity;
+import me.carc.intervaltimer.sound.SoundServices;
 import me.carc.intervaltimer.ui.adapters.HistoryAdapter;
 import me.carc.intervaltimer.ui.listeners.ClickListener;
 import me.carc.intervaltimer.utils.Commons;
 import me.carc.intervaltimer.utils.ViewUtil;
+import me.carc.intervaltimer.widgets.AutoResizeTextView;
 import me.carc.intervaltimer.widgets.PickerPrefDialog;
 import me.carc.intervaltimer.widgets.circle_progress.DonutProgress;
 
@@ -113,7 +114,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     @BindView(R.id.restPreviewText)     TextView restPreviewText;
     @BindView(R.id.time_panel)          LinearLayout timeLeftPanel;
     @BindView(R.id.timerRemaining)      TextView timerRemaining;
-    @BindView(R.id.timerMessage)        TextView timerMessage;
+    @BindView(R.id.timerMessage)        AutoResizeTextView timerMessage;
     @BindView(R.id.round_number)        TextView textViewRounds;
     @BindView(R.id.fabSettings)         FloatingActionButton fabSettings;
     @BindView(R.id.fabTimer)            FloatingActionButton fab;
@@ -322,7 +323,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         final int roundsTotal = this.roundsTotal;
         final String workTime = Preferences.getWorkTime(this);
         final String restTime = Preferences.getRestTime(this);
-        final HistoryItem historyItem = new HistoryItem(id, date, "Rename Me", remainTitle, elaspedTime, roundsCompleted, roundsTotal, workTime, restTime);
+        final HistoryItem historyItem = new HistoryItem(id, date, "Rename Me", remainTitle, elaspedTime, roundsCompleted, roundsTotal, workTime, restTime, false);
 
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override

@@ -317,7 +317,7 @@ public class IntervalTimerActivity extends Activity implements SensorEventListen
         final int roundsTotal = this.roundsTotal;
         final String workTime = Preferences.getWorkTime(this);
         final String restTime = Preferences.getRestTime(this);
-        final HistoryItem historyItem = new HistoryItem(id, date, "Rename Me", remainTitle, elaspedTime, roundsCompleted, roundsTotal, workTime, restTime);
+        final HistoryItem historyItem = new HistoryItem(id, date, "Rename Me", remainTitle, elaspedTime, roundsCompleted, roundsTotal, workTime, restTime, false);
 
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
