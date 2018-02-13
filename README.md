@@ -32,7 +32,10 @@ It was developed for running but can be used for exercise that uses intervals.
 - [ ] Animated gradient on work screen
 - [ ] Animated gradient on rest screen
 - [x] History dialog for workout summary 
-- [x] Lock items to the database - they're not deleted while locked
+- [x] Lock items to the database - they're not deleted while locked (or a warning is shown)
+- [x] Added showcase to highlight functionality
 
 
 
+#### Extra Activities
+This repo contains some unused components - basically stuff I've played with and plan to come back to or just haven't removed yet. 
