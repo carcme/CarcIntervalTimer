@@ -22,8 +22,9 @@ public class Painter {
     private static final int MIN = 20000;
     private static final int MAX = 60000;
 
+    private int mDuration;
     private final Random random;
-    private final int baseColor;
+    private int baseColor;
     private boolean stopAmimating;
 
     public Painter(int color) {
@@ -32,6 +33,14 @@ public class Painter {
         else
             baseColor = getRandColor();
         random = new Random();
+    }
+
+    public void setBaseColor(int color) {
+        baseColor = color;
+    }
+
+    public void setDuration(int duration) {
+        mDuration = duration;
     }
 
     public static int getRandColor() {
@@ -57,7 +66,7 @@ public class Painter {
 
         final ValueAnimator valueAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), color1, color2);
 
-        valueAnimator.setDuration(randInt(MIN, MAX));
+        valueAnimator.setDuration(mDuration != 0 ? mDuration : randInt(MIN, MAX));
 
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override public void onAnimationUpdate(ValueAnimator animation) {

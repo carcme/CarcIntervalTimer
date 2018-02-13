@@ -36,12 +36,12 @@ public class HistoryViewerDialog extends Dialog {
         String date = item.getDate().substring(0, timeDelimit);
         String time = item.getDate().substring(timeDelimit + 1, item.getDate().length());
 
-        TextView dateTV      = findViewById(R.id.date);
-        TextView timeTV      = findViewById(R.id.time);
-        TextView durationTV  = findViewById(R.id.duration);
-        TextView roundsTV    = findViewById(R.id.rounds);
-        TextView workTV      = findViewById(R.id.work);
-        TextView restTV      = findViewById(R.id.rest);
+        TextView dateTV = findViewById(R.id.date);
+        TextView timeTV = findViewById(R.id.time);
+        TextView durationTV = findViewById(R.id.duration);
+        TextView roundsTV = findViewById(R.id.rounds);
+        TextView workTV = findViewById(R.id.work);
+        TextView restTV = findViewById(R.id.rest);
         final ImageButton itemLock = findViewById(R.id.itemLock);
 
         dateTV.setText(date);
@@ -70,7 +70,7 @@ public class HistoryViewerDialog extends Dialog {
         cancelBtn.setVisibility(View.GONE);
 
 
-        if(item.isLocked())
+        if (item.isLocked())
             itemLock.setImageResource(R.drawable.ic_locked);
         else
             itemLock.setImageResource(R.drawable.ic_unlocked);
@@ -78,12 +78,12 @@ public class HistoryViewerDialog extends Dialog {
         itemLock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(item.isLocked()) {
-                    lockListener.onLockItme(false);
+                if (item.isLocked()) {
+                    lockListener.onLockItem(false);
                     item.setLocked(false);
                     itemLock.setImageResource(R.drawable.ic_unlocked);
                 } else {
-                    lockListener.onLockItme(true);
+                    lockListener.onLockItem(true);
                     item.setLocked(true);
                     itemLock.setImageResource(R.drawable.ic_locked);
                 }

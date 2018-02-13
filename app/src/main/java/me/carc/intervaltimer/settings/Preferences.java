@@ -42,6 +42,12 @@ public class Preferences {
         editor.apply();
     }
 
+    public static void firstRunComplete(Context context) {
+        SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        prefs.putBoolean(FIRST_RUN, false);
+        prefs.apply();
+    }
+
     public static Boolean isFirstRun(Context context) {
         SharedPreferences value = PreferenceManager.getDefaultSharedPreferences(context);
         return value.getBoolean(FIRST_RUN, true);

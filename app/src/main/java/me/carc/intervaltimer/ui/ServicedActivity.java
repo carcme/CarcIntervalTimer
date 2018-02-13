@@ -26,12 +26,17 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -74,6 +79,9 @@ import me.carc.intervaltimer.widgets.PickerPrefDialog;
 import me.carc.intervaltimer.widgets.circle_progress.DonutProgress;
 import me.carc.intervaltimer.widgets.listeners.HistoryItemLockListener;
 import me.carc.intervaltimer.widgets.listeners.NumberSetListener;
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
+import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.FocusShape;
 
 public class ServicedActivity extends Activity implements SensorEventListener {
 
@@ -114,6 +122,100 @@ public class ServicedActivity extends Activity implements SensorEventListener {
     @BindView(R.id.resetBtn)        Button resetBtn;
     @BindView(R.id.recyclerView)    RecyclerView recyclerView;
     @BindView(R.id.fabDonutProgress)DonutProgress fabDonutProgress;
+
+
+    private void helpShowcase() {
+
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                boolean landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+                int borderColor = ContextCompat.getColor(ServicedActivity.this, R.color.colorAccent);
+                Animation enterAnimation = AnimationUtils.loadAnimation(ServicedActivity.this, R.anim.fade_in);
+
+                final FancyShowCaseView workout = new FancyShowCaseView.Builder(ServicedActivity.this)
+                        .title(Html.fromHtml("<em>Tap</em> to change your <em>WORKOUT</em> time"))
+                        .fitSystemWindows(true)
+                        .focusBorderColor(borderColor)
+                        .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                        .focusBorderSize(5)
+                        .enterAnimation(enterAnimation)
+                        .focusOn(findViewById(R.id.workPanel))
+                        .build();
+
+                final FancyShowCaseView rest = new FancyShowCaseView.Builder(ServicedActivity.this)
+                        .title(Html.fromHtml("<em>Tap</em> to change your <em>REST</em> time"))
+                        .fitSystemWindows(true)
+                        .focusBorderColor(borderColor)
+                        .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                        .focusBorderSize(5)
+                        .enterAnimation(enterAnimation)
+                        .focusOn(findViewById(R.id.restPanel))
+                        .build();
+
+                final FancyShowCaseView rounds = new FancyShowCaseView.Builder(ServicedActivity.this)
+                        .title(Html.fromHtml("<em>Touch</em> here to adjust the number of <em>ROUNDS</em> for your workout"))
+                        .fitSystemWindows(true)
+                        .focusBorderColor(borderColor)
+                        .focusBorderSize(5)
+                        .enterAnimation(enterAnimation)
+                        .focusOn(findViewById(R.id.roundPanel))
+                        .build();
+
+                final FancyShowCaseView settings = new FancyShowCaseView.Builder(ServicedActivity.this)
+                        .title(Html.fromHtml("Change </em>SETTINGS</em>.<p>You can configure pretty much everything</p>"))
+                        .fitSystemWindows(true)
+                        .focusBorderColor(borderColor)
+                        .focusBorderSize(2)
+                        .enterAnimation(enterAnimation)
+                        .focusOn(fabSettings)
+                        .build();
+
+                final FancyShowCaseView start = new FancyShowCaseView.Builder(ServicedActivity.this)
+                        .title(Html.fromHtml("<p>Where the magic happens.<p></p><em>Touch</em> to <em>START</em> your workout.</p><p>During your workout, <em>Hold</em> to <em>PAUSE</em> the workout</p>"))
+                        .fitSystemWindows(true)
+                        .focusBorderColor(borderColor)
+                        .focusBorderSize(2)
+                        .enterAnimation(enterAnimation)
+                        .focusOn(fabTimer)
+                        .build();
+
+                final FancyShowCaseView history = new FancyShowCaseView.Builder(ServicedActivity.this)
+                        .title(Html.fromHtml("<p>&nbsp</p><p>Displays your workout history.</p><p></em>Touch</em> to display a summary or <em>Hold</em> to delete items</p>"))
+                        .fitSystemWindows(true)
+                        .focusBorderColor(borderColor)
+                        .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                        .titleGravity(landscape ? Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL : Gravity.TOP | Gravity.CENTER_HORIZONTAL)
+                        .focusBorderSize(5)
+                        .enterAnimation(enterAnimation)
+                        .focusOn(recyclerView.getLayoutManager().findViewByPosition(0))
+                        .build();
+
+                final FancyShowCaseView history2 = new FancyShowCaseView.Builder(ServicedActivity.this)
+                        .title(Html.fromHtml("Random motivational <em>QUOTES</em> will appear here during workouts.<p><em>QUOTES</em> and <em>HISTORY</em> can be disabled in <em>Settings</em></p>"))
+                        .fitSystemWindows(true)
+                        .focusBorderColor(borderColor)
+                        .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                        .titleGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL)
+                        .focusBorderSize(5)
+                        .focusOn(recyclerView.getLayoutManager().findViewByPosition(0))
+                        .build();
+
+                new FancyShowCaseQueue()
+                        .add(workout)
+                        .add(rest)
+                        .add(rounds)
+                        .add(settings)
+                        .add(start)
+                        .add(history)
+                        .add(history2)
+                        .show();
+            }
+        });
+    }
 
 
     private final Runnable longPressToPause = new Runnable() {
@@ -353,6 +455,17 @@ public class ServicedActivity extends Activity implements SensorEventListener {
             public void run() {
                 AppDatabase db = ((App) getApplicationContext()).getDB();
                 db.historyDao().insert(historyItem);
+
+                if(Preferences.isFirstRun(ServicedActivity.this)) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((HistoryAdapter) recyclerView.getAdapter()).addItem(historyItem);
+                            helpShowcase();
+                            Preferences.firstRunComplete(ServicedActivity.this);
+                        }
+                    });
+                }
             }
         });
     }
@@ -388,12 +501,46 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                AppDatabase db = ((App) getApplicationContext()).getDB();
-                HistoryItem item = db.historyDao().findByIndex(itemIndex);
+                final AppDatabase db = ((App) getApplicationContext()).getDB();
+                final HistoryItem item = db.historyDao().findByIndex(itemIndex);
+
                 if (Commons.isNotNull(item))
                     db.historyDao().delete(item);
             }
         });
+    }
+
+    private void removeHistorytem(HistoryItem item) {
+        removeFromDatabase(item.getKeyID());
+        HistoryAdapter historyAdapter = (HistoryAdapter) recyclerView.getAdapter();
+        int index = historyAdapter.getItemPosition(item);
+        if (index >= 0 && historyAdapter.removeItem(index)) {
+            historyAdapter.notifyItemRemoved(index);
+            historyAdapter.notifyItemRangeChanged(index, historyAdapter.getItemCount());
+        }
+    }
+
+    private void removeAllItems() {
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_delete_all)
+                .setTitle("Remove Unlocked Entries?")
+                .setMessage("This will delete all unlocked entries? You can not undo this")
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                    }
+                })
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((HistoryAdapter) recyclerView.getAdapter()).removeAll();
+                        nukeDatabase();
+                        dialog.dismiss();
+                    }
+                });
+        dlg.show();
     }
 
     private void nukeDatabase() {
@@ -404,9 +551,18 @@ public class ServicedActivity extends Activity implements SensorEventListener {
 
                 List<HistoryItem> allItems = db.historyDao().getAllEntries();
 
+                boolean warningShown = false;
                 for (HistoryItem item : allItems) {
                     if(!item.isLocked()){
                         db.historyDao().delete(item);
+                    } else if(!warningShown) {
+                        warningShown = true;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(ServicedActivity.this, "Locked items are not removed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
                 loadDatabase();
@@ -562,7 +718,7 @@ public class ServicedActivity extends Activity implements SensorEventListener {
             public void onClick(final HistoryItem item) {
                 HistoryViewerDialog viewer = new HistoryViewerDialog(ServicedActivity.this, item, new HistoryItemLockListener() {
                     @Override
-                    public void onLockItme(boolean lock) {
+                    public void onLockItem(boolean lock) {
                         item.setLocked(lock);
                         updateItemToDatabase(item);
                     }
@@ -593,13 +749,26 @@ public class ServicedActivity extends Activity implements SensorEventListener {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                removeFromDatabase(item.getKeyID());
-                                HistoryAdapter historyAdapter = (HistoryAdapter) recyclerView.getAdapter();
-                                int index = historyAdapter.getItemPosition(item);
-                                if (historyAdapter.removeItem(index)) {
-                                    historyAdapter.notifyItemRemoved(index);
-                                    historyAdapter.notifyItemRangeChanged(index, historyAdapter.getItemCount());
-                                }
+                                if(item.isLocked()) {
+                                    AlertDialog.Builder dlg = new AlertDialog.Builder(ServicedActivity.this)
+                                            .setIcon(R.drawable.ic_locked)
+                                            .setTitle("Locked Entry")
+                                            .setMessage("This entry is locked. Do you really want to remove it?")
+                                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            })
+                                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    removeHistorytem(item);
+                                                }
+                                            });
+                                    dlg.show();
+                                } else
+                                    removeHistorytem(item);
                             }
                         });
                 dlg.show();
@@ -614,7 +783,18 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         mLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        loadDatabase();
+        // Create a dummy history entry on first run to demonstrate History
+        if(Preferences.isFirstRun(this)){
+            HistoryItem history = new HistoryItem();
+            history.setDate(Commons.readableDate(System.currentTimeMillis()));
+            history.setElaspedTime("xx:yy:zz");
+            history.setRoundsCompleted(roundCurrent);
+            history.setRoundsTotal(roundsTotal);
+            history.setWorkTime("xx:xx");
+            history.setRestTime("yy:yy");
+            updateItemToDatabase(history);
+        } else
+            loadDatabase();
     }
 
 
@@ -826,7 +1006,6 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         }
     };
 
-
     private String getElaspedTime(long millis) {
         long second = (millis / 1000) % 60;
         long minute = (millis / (1000 * 60)) % 60;
@@ -846,7 +1025,6 @@ public class ServicedActivity extends Activity implements SensorEventListener {
         return true;
     }
 
-
     private void showSnack(String text, @ColorRes int color) {
         Snackbar snackbar = Snackbar.make(fabTimer, text, Snackbar.LENGTH_LONG);
         View view = snackbar.getView();
@@ -857,15 +1035,11 @@ public class ServicedActivity extends Activity implements SensorEventListener {
     private void keepScreenOn(boolean keepOn) {
         if (Preferences.stayAwake(this)) {
             fabTimer.setKeepScreenOn(keepOn);
-//            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-//            PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, getPackageName());
-            if(keepOn) {
-//                wakeLock.acquire();
+            if(keepOn)
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            } else {
-//                wakeLock.release();
+            else
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
+
         }
     }
 
@@ -879,31 +1053,6 @@ public class ServicedActivity extends Activity implements SensorEventListener {
 
     private void unlockOrientation() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-    }
-
-
-    private void removeAllItems() {
-
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_delete_all)
-                .setTitle("Remove Unlocked Entries?")
-                .setMessage("This will delete all unlocked entries? You can not undo this")
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-
-                    }
-                })
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((HistoryAdapter) recyclerView.getAdapter()).removeAll();
-                        nukeDatabase();
-                        dialog.dismiss();
-                    }
-                });
-        dlg.show();
     }
 
 
@@ -923,22 +1072,13 @@ public class ServicedActivity extends Activity implements SensorEventListener {
             }
     }
 
-//   private Painter bgPaint;
-
-
     private void setViewColors(@Nullable EffortLevel lvl) {
         Boolean showQuotes = Preferences.showQuotes(this);
 
-//        if(bgPaint != null)
-//            bgPaint.stopAnimating();
-
         if (lvl == null) {
-            timerBackground.setBackgroundResource(R.drawable.timer_bg_primary);
+//            timerBackground.setBackgroundResource(R.drawable.timer_bg_primary);
             timerBackground.setBackgroundResource(R.drawable.animation_list);
-//            bgPaint = new Painter(Painter.getRandColor());
-//            bgPaint.animate(timerBackground, Painter.getRandColor());
-
-            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.colorMainBackgroundSecondary));
+            timerMessage.setTextColor(ContextCompat.getColor(this, R.color.colorWork));
 
         } else if (lvl == EffortLevel.HARD) {
             timerBackground.setBackgroundResource(R.drawable.timer_bg_work);
@@ -951,10 +1091,6 @@ public class ServicedActivity extends Activity implements SensorEventListener {
             ++roundCurrent;
             setRoundTextView();
 
-//            bgPaint = new Painter(ContextCompat.getColor(this, R.color.md_light_green_700));
-//            bgPaint.animate(timerBackground, ContextCompat.getColor(this, R.color.md_green_700));
-
-
         } else if (lvl == EffortLevel.REST) {
             timerBackground.setBackgroundResource(R.drawable.timer_bg_rest);
             timerMessage.setTextColor(ContextCompat.getColor(this, R.color.md_light_blue_300));
@@ -963,9 +1099,6 @@ public class ServicedActivity extends Activity implements SensorEventListener {
             else
                 timerMessage.setText(R.string.restDefaultMsg);
 
-//            bgPaint = new Painter(ContextCompat.getColor(this, R.color.md_light_blue_600));
-//            bgPaint.animate(timerBackground, ContextCompat.getColor(this, R.color.md_blue_700));
-
         } else if (lvl == EffortLevel.EASY) {
             timerBackground.setBackgroundResource(R.drawable.timer_bg_prep);
             timerMessage.setTextColor(ContextCompat.getColor(this, R.color.md_amber_200));
@@ -973,9 +1106,6 @@ public class ServicedActivity extends Activity implements SensorEventListener {
                 timerMessage.setText(getRandomString(R.array.prepQuotes));
             else
                 timerMessage.setText(R.string.prepDefaultMsg);
-
-//            bgPaint = new Painter(ContextCompat.getColor(this, R.color.md_amber_400));
-//            bgPaint.animate(timerBackground, ContextCompat.getColor(this, R.color.md_amber_600));
 
         } else if (lvl == EffortLevel.NONE) {
             timerBackground.setBackgroundResource(R.drawable.timer_bg_primary);

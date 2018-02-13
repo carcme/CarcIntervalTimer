@@ -44,7 +44,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         Context ctx = holder.historyCardView.getContext();
 
-
         final String date = String.format(Locale.US, ctx.getString(R.string.history_item_date), data.getDate());
         holder.historyDate.setText(date);
 

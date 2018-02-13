@@ -113,6 +113,7 @@
     <orderEntry type="library" exported="" name="cardview-v7-26.0.2" level="project" />
     <orderEntry type="library" exported="" name="support-v13-26.0.2" level="project" />
     <orderEntry type="library" exported="" name="support-media-compat-26.0.2" level="project" />
+    <orderEntry type="library" exported="" name="FancyShowCaseView-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-26.0.2" level="project" />
     <orderEntry type="library" exported="" name="constraint-layout-1.0.2" level="project" />
     <orderEntry type="library" exported="" name="support-db-impl-1.0.0-alpha7" level="project" />

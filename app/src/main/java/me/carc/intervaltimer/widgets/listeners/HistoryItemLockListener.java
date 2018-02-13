@@ -5,5 +5,5 @@ package me.carc.intervaltimer.widgets.listeners;
  */
 
 public interface HistoryItemLockListener {
-    void onLockItme(boolean lock);
+    void onLockItem(boolean lock);
 }

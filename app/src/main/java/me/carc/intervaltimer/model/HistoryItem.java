@@ -2,6 +2,7 @@ package me.carc.intervaltimer.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.Keep;
 
@@ -42,6 +43,9 @@ public class HistoryItem {
     @ColumnInfo(name = "locked")
     private boolean locked;
 
+
+    @Ignore
+    public HistoryItem() {}
 
     public HistoryItem(int keyID, String date, String title, String timeRemaining, String elaspedTime,
                        int roundsCompleted, int roundsTotal, String workTime, String restTime, boolean locked) {
