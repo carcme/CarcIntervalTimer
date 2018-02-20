@@ -1,0 +1,9 @@
+EN
+
+https://www.norio.be/android-feature-graphic-generator/?config=%7B%22background%22%3A%7B%22color%22%3A%22%23444444%22%2C%22gradient%22%3A%7B%22type%22%3A%22radial%22%2C%22radius%22%3A%22600%22%2C%22angle%22%3A%22vertical%22%2C%22color%22%3A%22%23000000%22%7D%7D%2C%22title%22%3A%7B%22text%22%3A%22xIT%20TimeR%22%2C%22position%22%3A46%2C%22color%22%3A%22%23445434%22%2C%22size%22%3A244%2C%22font%22%3A%7B%22family%22%3A%22Righteous%22%2C%22effect%22%3A%22normal%22%7D%7D%2C%22subtitle%22%3A%7B%22text%22%3A%22SIMPLE%20EASY%20INTUITIVE%22%2C%22color%22%3A%22%23445434%22%2C%22size%22%3A102%2C%22offset%22%3A0%2C%22font%22%3A%7B%22family%22%3A%22Inconsolata%22%2C%22effect%22%3A%22normal%22%7D%7D%2C%22image%22%3A%7B%22position%22%3A%220.55%22%2C%22positionX%22%3A%220.5%22%2C%22scale%22%3A%220.2%22%2C%22file%22%3A%7B%7D%7D%2C%22size%22%3A%22feature-graphic%22%7D
+
+
+
+DE
+
+https://www.norio.be/android-feature-graphic-generator/?config=%7B%22background%22%3A%7B%22color%22%3A%22%23000000%22%2C%22gradient%22%3A%7B%22type%22%3A%22linear%22%2C%22radius%22%3A%221000%22%2C%22angle%22%3A%22vertical%22%2C%22color%22%3A%22%23000000%22%7D%7D%2C%22title%22%3A%7B%22text%22%3A%22xIT%20TimeR%22%2C%22position%22%3A46%2C%22color%22%3A%22%23445434%22%2C%22size%22%3A244%2C%22font%22%3A%7B%22family%22%3A%22Righteous%22%2C%22effect%22%3A%22normal%22%7D%7D%2C%22subtitle%22%3A%7B%22text%22%3A%22EINFACHES%20SICHERES%20INTUITIVES%22%2C%22color%22%3A%22%23445434%22%2C%22size%22%3A74%2C%22offset%22%3A0%2C%22font%22%3A%7B%22family%22%3A%22Inconsolata%22%2C%22effect%22%3A%22normal%22%7D%7D%2C%22image%22%3A%7B%22position%22%3A%220.55%22%2C%22positionX%22%3A%220.5%22%2C%22scale%22%3A%220.2%22%2C%22file%22%3A%7B%7D%7D%2C%22size%22%3A%22feature-graphic%22%7D
