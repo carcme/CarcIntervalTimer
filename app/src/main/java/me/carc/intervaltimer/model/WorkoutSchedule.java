@@ -3,15 +3,12 @@ package me.carc.intervaltimer.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import me.carc.intervaltimer.ui.MainActivity;
-
 /**
  * Created by bamptonm on 05/02/2018.
  */
 
 public class WorkoutSchedule implements Parcelable {
 
-    private MainActivity.State state;
 
     private long prep;
     private long work;
@@ -26,8 +23,7 @@ public class WorkoutSchedule implements Parcelable {
 
 
 
-    public WorkoutSchedule(MainActivity.State state, long prep, long work, long rest, int rounds, int currentRound) {
-        this.state = state;
+    public WorkoutSchedule(long prep, long work, long rest, int rounds, int currentRound) {
         this.prep= prep;
         this.work = work;
         this.rest = rest;
@@ -37,12 +33,6 @@ public class WorkoutSchedule implements Parcelable {
         this.durationTotal = prep + (work * rounds) + (rest * (rounds - 1));
     }
 
-    public MainActivity.State getState() {
-        return state;
-    }
-    public void setState(MainActivity.State state) {
-        this.state = state;
-    }
 
     public long getPrep() {
         return prep;
@@ -99,7 +89,6 @@ public class WorkoutSchedule implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.state == null ? -1 : this.state.ordinal());
         dest.writeLong(this.prep);
         dest.writeLong(this.work);
         dest.writeLong(this.rest);
@@ -110,7 +99,6 @@ public class WorkoutSchedule implements Parcelable {
 
     protected WorkoutSchedule(Parcel in) {
         int tmpState = in.readInt();
-        this.state = tmpState == -1 ? null : MainActivity.State.values()[tmpState];
         this.prep = in.readLong();
         this.work = in.readLong();
         this.rest = in.readLong();

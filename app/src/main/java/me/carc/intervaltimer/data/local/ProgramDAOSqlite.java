@@ -31,12 +31,12 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
-import me.carc.intervaltimer.model.DatabaseModel;
-import me.carc.intervaltimer.model.EffortLevel;
-import me.carc.intervaltimer.model.Exercise;
-import me.carc.intervaltimer.model.WorkoutGroup;
-import me.carc.intervaltimer.model.WorkoutItem;
-import me.carc.intervaltimer.model.WorkoutMetaData;
+import me.carc.intervaltimer.model.program.DatabaseModel;
+import me.carc.intervaltimer.model.program.EffortLevel;
+import me.carc.intervaltimer.model.program.Exercise;
+import me.carc.intervaltimer.model.program.WorkoutProgram;
+import me.carc.intervaltimer.model.program.WorkoutItem;
+import me.carc.intervaltimer.model.program.WorkoutMetaData;
 
 public class ProgramDAOSqlite extends SQLiteOpenHelper implements ProgramDAO {
 	private static ProgramDAOSqlite INSTANCE;
@@ -44,7 +44,7 @@ public class ProgramDAOSqlite extends SQLiteOpenHelper implements ProgramDAO {
 	private ExerciseTable exerciseTable = new ExerciseTable();
 	private NodeTable nodeTable = new NodeTable();
 	private ProgramTable programTable = new ProgramTable();
-	private LongSparseArray<WorkoutGroup> cache = new LongSparseArray<WorkoutGroup>();
+	private LongSparseArray<WorkoutProgram> cache = new LongSparseArray<WorkoutProgram>();
 
 	public static ProgramDAO getInstance(Context context) {
 		if (INSTANCE == null) {
@@ -70,7 +70,7 @@ public class ProgramDAOSqlite extends SQLiteOpenHelper implements ProgramDAO {
 		db.execSQL(programTable.getCreateSql());
 
 
-		WorkoutGroup runnerBeg = new WorkoutGroup("Beginner Running Intervals");
+		WorkoutProgram runnerBeg = new WorkoutProgram("Beginner Running Intervals");
         runnerBeg.getAssociatedNode().setTotalReps(1);
         runnerBeg.getAssociatedNode().addChildExercise("Preparation", 5000, EffortLevel.EASY);
         WorkoutItem extra = runnerBeg.getAssociatedNode().addChildNode(15);
@@ -78,13 +78,13 @@ public class ProgramDAOSqlite extends SQLiteOpenHelper implements ProgramDAO {
         extra.addChildExercise("Walk", minutesInMs(1), EffortLevel.REST);
 		saveProgram(runnerBeg, db);
 
-		WorkoutGroup tabata = new WorkoutGroup("Tabata Protocol");
+		WorkoutProgram tabata = new WorkoutProgram("Tabata Protocol");
 		tabata.getAssociatedNode().setTotalReps(8);
 		tabata.getAssociatedNode().addChildExercise(null, 20000, EffortLevel.HARD);
 		tabata.getAssociatedNode().addChildExercise(null, 10000, EffortLevel.REST);
 		saveProgram(tabata, db);
 
-		WorkoutGroup fartlek = new WorkoutGroup("Fartlek");
+		WorkoutProgram fartlek = new WorkoutProgram("Fartlek");
 		fartlek.getAssociatedNode().addChildExercise("Warm up", minutesInMs(15), EffortLevel.EASY);
 		WorkoutItem exercises = fartlek.getAssociatedNode().addChildNode(6);
 		exercises.addChildExercise("Burst!", 30000, EffortLevel.HARD);
@@ -93,7 +93,7 @@ public class ProgramDAOSqlite extends SQLiteOpenHelper implements ProgramDAO {
 		saveProgram(fartlek, db);
 
         
-		WorkoutGroup pyramid = new WorkoutGroup("Cardio-Sprint Pyramid");
+		WorkoutProgram pyramid = new WorkoutProgram("Cardio-Sprint Pyramid");
 		pyramid.getAssociatedNode().addChildExercise("Warm up", minutesInMs(15), EffortLevel.EASY);
 
 		pyramid.getAssociatedNode().addChildExercise("Sprint", 30000, EffortLevel.HARD);
@@ -140,7 +140,7 @@ public class ProgramDAOSqlite extends SQLiteOpenHelper implements ProgramDAO {
 
 		List<WorkoutMetaData> programs = new ArrayList<WorkoutMetaData>(cursor.getCount());
 		while (cursor.moveToNext()) {
-			WorkoutGroup program = new WorkoutGroup(cursor.getString(1));
+			WorkoutProgram program = new WorkoutProgram(cursor.getString(1));
 			program.setId(cursor.getLong(0));
 			program.setDescription(cursor.getString(2));
 			programs.add(program);
@@ -150,12 +150,12 @@ public class ProgramDAOSqlite extends SQLiteOpenHelper implements ProgramDAO {
 	}
 
 	@Override
-	public WorkoutGroup getProgram(long programId, boolean skipCache) {
+	public WorkoutProgram getProgram(long programId, boolean skipCache) {
 		if (skipCache) {
 			cache.remove(programId);
 		}
 
-		WorkoutGroup program = cache.get(programId);
+		WorkoutProgram program = cache.get(programId);
 		if (program == null) {
 			program = getProgram(programId, getReadableDatabase());
 			cache.put(programId, program);
@@ -164,7 +164,7 @@ public class ProgramDAOSqlite extends SQLiteOpenHelper implements ProgramDAO {
 		return program;
 	}
 
-	private WorkoutGroup getProgram(long programId, SQLiteDatabase db) {
+	private WorkoutProgram getProgram(long programId, SQLiteDatabase db) {
 		Cursor cursor = db.query(ProgramTable.NAME, null, programTable.getSingleQuery(programId), null, null, null,
 				null);
 
@@ -175,7 +175,7 @@ public class ProgramDAOSqlite extends SQLiteOpenHelper implements ProgramDAO {
 		String name = cursor.getString(cursor.getColumnIndexOrThrow(ProgramTable.Columns.NAME.name));
 		String description = cursor.getString(cursor.getColumnIndexOrThrow(ProgramTable.Columns.DESCRIPTION.name));
 
-		WorkoutGroup program = new WorkoutGroup(name);
+		WorkoutProgram program = new WorkoutProgram(name);
 		program.setDescription(description);
 		program.setId(programId);
 
@@ -259,14 +259,14 @@ public class ProgramDAOSqlite extends SQLiteOpenHelper implements ProgramDAO {
 	}
 
 	@Override
-	public long saveProgram(WorkoutGroup program) {
+	public long saveProgram(WorkoutProgram program) {
 		cache.delete(program.getId());
 		long id = this.saveProgram(program, getWritableDatabase());
 		cache.put(program.getId(), program);
 		return id;
 	}
 
-	private long saveProgram(WorkoutGroup program, SQLiteDatabase db) {
+	private long saveProgram(WorkoutProgram program, SQLiteDatabase db) {
 		db.beginTransaction();
 
 		if (program.getAssociatedNode() == null) {

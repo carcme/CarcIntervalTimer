@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="3"
+    android:layout_alignParentBottom="true"
+    android:orientation="horizontal"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:orientation="horizontal">
+
+        <me.carc.intervaltimer.widgets.AutoResizeTextView
+            android:id="@+id/mapDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="70sp"
+            tools:text="5.19"/>
+
+        <me.carc.intervaltimer.widgets.AutoResizeTextView
+            android:id="@+id/mapDistanceSuffix"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="casual"
+            android:gravity="bottom"
+            android:paddingBottom="@dimen/margin_small"
+            android:text="km"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/divider_faded_vert"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/mapTime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:fontFamily="casual"
+            android:textSize="20sp"
+            tools:text="00:35:55"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_small"
+            android:fontFamily="casual"
+            android:textSize="12sp"
+            android:text="Time"
+            tools:ignore="HardcodedText"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/divider_faded_vert"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/mapPace"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:fontFamily="casual"
+            android:textSize="20sp"
+            tools:text="6'55''"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/margin_small"
+            android:gravity="center"
+            android:fontFamily="casual"
+            android:textSize="12sp"
+            android:text="Pace"
+            tools:ignore="HardcodedText"/>
+
+    </LinearLayout>
+
+</LinearLayout>

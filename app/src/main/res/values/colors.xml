@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/md_grey_700</color>
-    <color name="colorPrimaryDark">@color/md_grey_900</color>
+    <color name="colorPrimaryDark">@color/md_blue_grey_900</color>
     <color name="colorAccent">@color/md_orange_700</color>
 
     <color name="colorMainBackgroundPrimary">@color/md_teal_500</color>
@@ -15,7 +15,11 @@
     <color name="color_settings">@color/colorPrimary</color>
     <color name="color_settings_dark">@color/colorPrimary</color>
 
-    <color name="color_tinted_random_text">#80000000</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="tintLight">#22000000</color>
+    <color name="tintStandard">#80000000</color>
+    <color name="tintDark">#A0000000</color>
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>

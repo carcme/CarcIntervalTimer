@@ -19,11 +19,12 @@
 package me.carc.intervaltimer.sound;
 
 
-import me.carc.intervaltimer.model.Exercise;
+import me.carc.intervaltimer.model.program.Exercise;
 
 public interface SoundPlayer {
 	void playExerciseStart(Exercise exercise);
 	void playWarningBeep();
+	void playSprintsBeep();
 	void playEnd();
 	void cleanUp();
 }

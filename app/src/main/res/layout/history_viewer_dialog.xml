@@ -1,166 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_standard"
-    >
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/viewerTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_standard"
-        android:text="Workout Summary"
-        android:textSize="20sp"
-        tools:ignore="HardcodedText"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_standard"
+            >
 
-    <ImageButton
-        android:id="@+id/itemLock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/lock_the_entry_in_the_database"
-        android:layout_alignParentEnd="true"
-        android:padding="@dimen/margin_standard"
-        android:layout_alignTop="@id/viewerTitle"
-        android:layout_alignBottom="@id/viewerTitle"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_unlocked"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/viewerTitle"
-        android:layout_marginStart="7dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingBottom="@dimen/margin_standard"
+                    android:text="Workout Summary"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="@dimen/textSizeLarge_openSource"
+                    android:textStyle="normal"
+                    tools:ignore="HardcodedText"/>
 
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+                <ImageButton
+                    android:id="@+id/itemLock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/lock_the_entry_in_the_database"
+                    android:paddingBottom="@dimen/margin_standard"
+                    android:paddingStart="@dimen/margin_standard"
+                    android:paddingEnd="@dimen/margin_standard"
+                    android:src="@drawable/ic_unlocked"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimary"/>
+
+           <TableLayout
+                android:id="@+id/tableLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/historyViewerTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/workout_title_hint"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapSentences|textMultiLine|text"
+                        android:maxLines ="3"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorAccent"/>
+
+                    <Spinner
+                        android:id="@+id/titleSpinner"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:paddingTop="7dp"
+                        android:paddingBottom="7dp"
+                        android:spinnerMode="dropdown" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="7dp"
+                        android:text="Date"
+                        tools:ignore="HardcodedText"/>
+
+                    <TextView
+                        android:id="@+id/date"
+                        style="@style/HistoryViewerRowTextStyle"
+                        tools:text="Random"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="7dp"
+                        android:text="Time"
+                        tools:ignore="HardcodedText"/>
+
+                    <TextView
+                        android:id="@+id/time"
+                        style="@style/HistoryViewerRowTextStyle"
+                        tools:text="Random"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="7dp"
+                        android:text="Workout Duration"
+                        tools:ignore="HardcodedText"/>
+
+                    <TextView
+                        android:id="@+id/duration"
+                        style="@style/HistoryViewerRowTextStyle"
+                        tools:text="Random"/>
+                </TableRow>
+
+               <TableRow
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:padding="7dp"
+                       android:text="Distance"
+                       tools:ignore="HardcodedText"/>
+
+                   <TextView
+                       android:id="@+id/distance"
+                       style="@style/HistoryViewerRowTextStyle"
+                       tools:text="Random"/>
+               </TableRow>
+
+
+               <TableRow
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:padding="7dp"
+                       android:text="Steps"
+                       tools:ignore="HardcodedText"/>
+
+                   <TextView
+                       android:id="@+id/steps"
+                       style="@style/HistoryViewerRowTextStyle"
+                       tools:text="Random"/>
+               </TableRow>
+
+               <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="7dp"
+                        android:text="Rounds Completed"
+                        tools:ignore="HardcodedText"/>
+
+                    <TextView
+                        android:id="@+id/rounds"
+                        style="@style/HistoryViewerRowTextStyle"
+                        android:layout_width="match_parent"
+                        tools:text="Random"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="7dp"
+                        android:text="Work / Rest"
+                        tools:ignore="HardcodedText"/>
+
+                    <TextView
+                        android:id="@+id/workRestTime"
+                        style="@style/HistoryViewerRowTextStyle"
+                        tools:text="Random"/>
+                </TableRow>
+
+            </TableLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:background="@color/colorPrimary"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="7dp"
-                android:text="Workout Date"
-                tools:ignore="HardcodedText"/>
+                android:gravity="end"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/date"
-                style="@style/HistoryViewerRowTextStyle"
-                tools:text="sdadsadas"/>
+                <Button
+                    android:id="@+id/cancelBtn"
+                    style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="@dimen/margin_standard"
+                    android:paddingEnd="@dimen/margin_standard"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical|start"
+                    android:text="@android:string/cancel"/>
 
-        </TableRow>
+                <Button
+                    android:id="@+id/mapBtn"
+                    style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@android:color/transparent"
+                    android:visibility="visible"
+                    android:text="@string/map"/>
 
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+                <Button
+                    android:id="@+id/setBtn"
+                    style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:enabled="false"
+                    android:text="@string/apply"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="7dp"
-                android:text="Workout Time"
-                tools:ignore="HardcodedText"/>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/time"
-                style="@style/HistoryViewerRowTextStyle"
-                tools:text="sdadsadas"/>
+        </LinearLayout>
 
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="7dp"
-                android:text="Workout Duration"
-                tools:ignore="HardcodedText"/>
-
-            <TextView
-                android:id="@+id/duration"
-                style="@style/HistoryViewerRowTextStyle"
-                tools:text="sdadsadas"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="7dp"
-                android:text="Rounds Completed"
-                tools:ignore="HardcodedText"/>
-
-            <TextView
-                android:id="@+id/rounds"
-                style="@style/HistoryViewerRowTextStyle"
-                tools:text="sdadsadas"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="7dp"
-                android:text="Work time"
-                tools:ignore="HardcodedText"/>
-
-            <TextView
-                android:id="@+id/work"
-                style="@style/HistoryViewerRowTextStyle"
-                tools:text="sdadsadas"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="7dp"
-                android:text="Work time"
-                tools:ignore="HardcodedText"/>
-
-            <TextView
-                android:id="@+id/rest"
-                style="@style/HistoryViewerRowTextStyle"
-                tools:text="sdadsadas"/>
-        </TableRow>
-
-    </TableLayout>
-
-
-
-    <Button
-        android:id="@+id/setBtn"
-        style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/tableLayout"
-        android:background="@android:color/transparent"
-        android:text="@android:string/ok"/>
-
-    <Button
-        android:id="@+id/cancelBtn"
-        style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tableLayout"
-        android:layout_toStartOf="@id/setBtn"
-        android:background="@android:color/transparent"
-        android:text="@android:string/cancel"/>
-
-</RelativeLayout>
+</ScrollView>

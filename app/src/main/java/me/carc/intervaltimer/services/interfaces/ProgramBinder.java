@@ -19,8 +19,8 @@
 package me.carc.intervaltimer.services.interfaces;
 
 
-import me.carc.intervaltimer.model.Exercise;
-import me.carc.intervaltimer.model.WorkoutItem;
+import me.carc.intervaltimer.model.program.Exercise;
+import me.carc.intervaltimer.model.program.WorkoutItem;
 
 public interface ProgramBinder {
 
@@ -41,6 +41,8 @@ public interface ProgramBinder {
 	boolean isPaused();
 
 	void registerCountDownObserver(CountDownObserver observer);
+
+	void registerGpsUpdates();
 
 	void unregisterCountDownObserver(CountDownObserver observer);
 

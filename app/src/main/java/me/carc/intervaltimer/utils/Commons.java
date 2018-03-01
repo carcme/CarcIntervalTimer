@@ -5,9 +5,13 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.appcompat.BuildConfig;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -21,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import me.carc.intervaltimer.R;
@@ -51,6 +56,15 @@ public class Commons {
         int g = rand.nextInt(200);
         int b = rand.nextInt(200);
         return Color.rgb(r, g, b);
+    }
+
+    @NonNull
+    public static Spanned fromHtml(@NonNull String source) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            return Html.fromHtml(source);
+        }
     }
 
     public static String formatString(long s1, long s2) {
@@ -96,12 +110,44 @@ public class Commons {
     }
 
     public static String readableDate(long timestamp) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yy:hh.mm.ss", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yy : hh.mm.ss", Locale.getDefault());
         if(timestamp != 0) {
             return  sdf.format(new Date(timestamp));
         }
         return sdf.format(new Date());
     }
+
+    public static String formatTimeString(long millis) {
+        long second = (millis / 1000) % 60;
+        long minute = (millis / (1000 * 60)) % 60;
+        long hour = (millis / (1000 * 60 * 60)) % 24;
+        long day = (millis / (1000 * 60 * 60 * 24));
+
+        if(day > 0)
+            return String.format(Locale.getDefault(), "%dd %02d:%02d:%02d", day, hour, minute, second);
+        else if (hour > 0)
+            return String.format(Locale.getDefault(), "%02d:%02d:%02d", hour, minute, second);
+        else
+            return String.format(Locale.getDefault(), "%02d:%02d", minute, second);
+    }
+
+    public static long dateParseRegExp(String period) {
+        Pattern pattern = Pattern.compile("(\\d{2}):(\\d{2}):(\\d{2})");
+
+        String[] split = period.split(":");
+        if(split.length == 2)
+            period = "00:" + period;
+
+        Matcher matcher = pattern.matcher(period);
+        if (matcher.matches()) {
+            return Long.parseLong(matcher.group(1)) * 3600000L
+                    + Long.parseLong(matcher.group(2)) * 60000
+                    + Long.parseLong(matcher.group(3)) * 1000;
+        } else {
+            return 0;//throw new IllegalArgumentException("Invalid format " + period);
+        }
+    }
+
 
     public static String buildStringFromArray(String[] arr) {
 

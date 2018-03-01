@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="sprint_time">
+        <item>disabled</item>
+        <item>10 Seconds</item>
+        <item>15 Seconds</item>
+        <item>20 Seconds</item>
+        <item>30 Seconds</item>
+    </string-array>
+    <string-array name="sprint_time_value">
+        <item>0</item>
+        <item>10000</item>
+        <item>15000</item>
+        <item>20000</item>
+        <item>30000</item>
+    </string-array>
+
+    <string-array name="gps_time">
+        <item>5 Seconds</item>
+        <item>10 Seconds</item>
+        <item>20 Seconds</item>
+        <item>30 Seconds</item>
+        <item>1 Minute</item>
+    </string-array>
+    <string-array name="gps_time_value">
+        <item>5000</item>
+        <item>10000</item>
+        <item>20000</item>
+        <item>30000</item>
+        <item>60000</item>
+    </string-array>
+
+    <string-array name="gps_distance">
+        <item>10 meters</item>
+        <item>30 meters</item>
+        <item>60 meters</item>
+        <item>100 meters</item>
+    </string-array>
+    <string-array name="gps_distance_value">
+        <item>10</item>
+        <item>30</item>
+        <item>60</item>
+        <item>100</item>
+    </string-array>
+
     <string-array name="warn_time">
         <item>@string/warn_time_no_warning</item>
         <item>3 Seconds</item>
@@ -9,7 +52,6 @@
         <item>10 Seconds</item>
         <item>15 Seconds</item>
     </string-array>
-
     <string-array name="warn_time_values">
         <item>0</item>
         <item>3</item>
@@ -39,7 +81,6 @@
         <item>If you can believe it, the mind can achieve it</item>
         <item>Make each day your masterpiece</item>
         <item>You miss 100 percent of the shots you don’t take</item>
-        <item>It\'s not whether you get knocked down; it\'s whether you get up</item>
         <item>Every accomplishment starts with the decision to try</item>
         <item>Push yourself. No one else will do it for you</item>
         <item>Improvement begins at the end of your comfort zone</item>
@@ -52,10 +93,9 @@
     </string-array>
 
     <string-array name="workTTS">
-
         <item>Time to kick ass and chew bubble gum… and I\'m all outta gum.</item>
         <item>Do, or do not. There is no try</item>
-        <item>Gonna rip them a new one</item>
+        <item>Gonna rip this a new one</item>
         <item>Let\'s rock</item>
         <item>What are you waiting for? Christmas?</item>
         <item>I love the smell of sweat in the morning</item>
@@ -98,12 +138,13 @@
         <item>Exercise. Zombies will eat the slow ones first</item>
         <item>ZombieLand Rule #1. Cardio</item>
         <item>ZombieLand Rule #20. It’s a marathon, not a sprint. Unless it\'s a sprint. then sprint</item>
-        <item>You have a choice. You can throw in the towel, or you can use it to wipe the sweat off of your face</item>
         <item>Some of the world\'s greatest feats were accomplished by people not smart enough to know they were impossible</item>
     </string-array>
 
     <string-array name="restTTS">
         <item>And rest</item>
+        <item>You have a choice. You can throw in the towel, or you can use it to wipe the sweat off of your face</item>
+        <item>It\'s not whether you get knocked down; it\'s whether you get up</item>
         <item>Get your breath back</item>
         <item>Have a rest and then do it all again</item>
         <item>Pain is temporary</item>

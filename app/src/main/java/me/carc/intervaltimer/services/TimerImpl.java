@@ -20,9 +20,9 @@ package me.carc.intervaltimer.services;
 
 import android.os.CountDownTimer;
 
-import me.carc.intervaltimer.model.Exercise;
-import me.carc.intervaltimer.model.WorkoutGroup;
-import me.carc.intervaltimer.model.WorkoutItem;
+import me.carc.intervaltimer.model.program.Exercise;
+import me.carc.intervaltimer.model.program.WorkoutProgram;
+import me.carc.intervaltimer.model.program.WorkoutItem;
 import me.carc.intervaltimer.services.interfaces.CountDownObserver;
 import me.carc.intervaltimer.services.interfaces.ProgramRunner;
 import me.carc.intervaltimer.utils.PeekaheadQueue;
@@ -31,7 +31,7 @@ public class TimerImpl implements ProgramRunner {
 
 	private CountDownTimer countDown;
 
-	private WorkoutGroup program;
+	private WorkoutProgram program;
 	private PeekaheadQueue<WorkoutItem> nodeQueue;
 	private CountDownObserver observer;
 	private int exerciseMsRemaining;
@@ -40,7 +40,7 @@ public class TimerImpl implements ProgramRunner {
 	private boolean paused = false;
 	private boolean stopped = false;
 
-	public TimerImpl(WorkoutGroup program, CountDownObserver observer) {
+	public TimerImpl(WorkoutProgram program, CountDownObserver observer) {
 		this.program = program;
 		this.nodeQueue = program.asQueue();
 		this.observer = observer;
@@ -56,7 +56,6 @@ public class TimerImpl implements ProgramRunner {
 		paused = false;
 
 		observer.onStart();
-
 		countDown.start();
 	}
 
@@ -68,7 +67,6 @@ public class TimerImpl implements ProgramRunner {
 
 		observer.onExerciseStart(getCurrentExercise());
 		observer.onProgramFinish();
-
 		countDown.cancel();
 	}
 
@@ -78,9 +76,7 @@ public class TimerImpl implements ProgramRunner {
 		paused = false;
 
 		observer.onResume();
-
 		countDown.start();
-
 	}
 
 	@Override
@@ -109,7 +105,7 @@ public class TimerImpl implements ProgramRunner {
 	}
 
 	@Override
-	public WorkoutGroup getProgram() {
+	public WorkoutProgram getProgram() {
 		return program;
 	}
 
@@ -123,7 +119,6 @@ public class TimerImpl implements ProgramRunner {
 	public void pause() {
 		paused = true;
 		running = false;
-
 
 		countDown.cancel();
 		countDown = new ProgramCountDown(programMsRemaining, TICK_RATE);
@@ -176,9 +171,7 @@ public class TimerImpl implements ProgramRunner {
 
 				observer.onExerciseStart(getCurrentExercise());
 			}
-
-			observer.onTick(exerciseMsRemaining, millisUntilFinished);
+			observer.onTick(exerciseMsRemaining, millisUntilFinished, 0);
 		}
 	}
-
 }

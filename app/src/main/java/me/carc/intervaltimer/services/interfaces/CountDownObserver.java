@@ -18,14 +18,17 @@
 
 package me.carc.intervaltimer.services.interfaces;
 
-import me.carc.intervaltimer.model.Exercise;
+import java.util.ArrayList;
+
+import me.carc.intervaltimer.model.LatLon;
+import me.carc.intervaltimer.model.program.Exercise;
 
 public interface CountDownObserver {
 	void onStart();
 
 	void onResume();
 
-	void onTick(long exerciseMsRemaining, long programMsRemaining);
+	void onTick(long exerciseMsRemaining, long programMsRemaining, long stepCount);
 
 	void onExerciseStart(Exercise exercise);
 
@@ -34,6 +37,10 @@ public interface CountDownObserver {
 	void onPause();
 
 	void onError(CountDownObserver.ProgramError error);
+
+	void onLocationsUpdate(ArrayList<LatLon> locations);
+
+	void onGpsResults(ArrayList<LatLon> locations);
 
 	public enum ProgramError {
 		ZERO_DURATION;

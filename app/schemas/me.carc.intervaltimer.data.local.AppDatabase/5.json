@@ -1,0 +1,105 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 5,
+    "identityHash": "4ac379c6d51223b2ce7b6e816944e95f",
+    "entities": [
+      {
+        "tableName": "HistoryItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`keyID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT, `title` TEXT, `timeRemaining` TEXT, `elaspedTime` TEXT, `roundsCompleted` INTEGER NOT NULL, `roundsTotal` INTEGER NOT NULL, `workTime` TEXT, `restTime` TEXT, `locked` INTEGER NOT NULL, `locations` TEXT, `distance` REAL NOT NULL, `distanceFmt` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "keyID",
+            "columnName": "keyID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "timeRemaining",
+            "columnName": "timeRemaining",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "elaspedTime",
+            "columnName": "elaspedTime",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "roundsCompleted",
+            "columnName": "roundsCompleted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roundsTotal",
+            "columnName": "roundsTotal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "workTime",
+            "columnName": "workTime",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "restTime",
+            "columnName": "restTime",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "locked",
+            "columnName": "locked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "locations",
+            "columnName": "locations",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "distance",
+            "columnName": "distance",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "distanceFmt",
+            "columnName": "distanceFmt",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "keyID"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"4ac379c6d51223b2ce7b6e816944e95f\")"
+    ]
+  }
+}

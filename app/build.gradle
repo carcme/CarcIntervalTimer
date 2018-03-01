@@ -14,7 +14,6 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
@@ -22,31 +21,47 @@ android {
         applicationId "me.carc.carcintervaltimer"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode="8"
-        versionName="0.0.8-beta"
-        vectorDrawables.useSupportLibrary = true
+        versionCode 63
+        versionName "1.0.6"
+        android.defaultConfig.vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+        resConfigs "en", "de"
+        resValue "string", "GOOGLE_API", GOOGLE_API
     }
     buildTypes {
         debug {
+            buildConfigField "String", "MAPBOX_API", getPrivateKey("MAPBOX_API")
+            buildConfigField "String", "GOOGLE_API", getPrivateKey("GOOGLE_API")
         }
         release {
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
             useProguard true
+
+            buildConfigField "String", "MAPBOX_API", getPrivateKey("MAPBOX_API")
+            buildConfigField "String", "GOOGLE_API", getPrivateKey("GOOGLE_API")
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     productFlavors {
     }
 }
+
+// Get your own key at https://graphhopper.com/#directions-api and copy it to 'local.properties'
+def static getPrivateKey(String property) {
+    def Properties props = new Properties()
+    props.load(new FileInputStream(new File('local.properties')))
+    return props[property]
+}
+
 ext {
-    SUPPORT_LIBRARY_VERSION = '26.0.2'
+    SUPPORT_LIBRARY_VERSION = '26.1.0'
     constraintLayoutVersion = '1.0.2'
 
     BUTTERKNIFE_VERSION = '8.4.0'
@@ -56,7 +71,9 @@ ext {
     RXLIFECYCLE = '2.2.1'
     RXPERMISSIONS = '0.9.5@aar'
 
-    ROOMVERSION= '1.0.0-alpha7'
+    ROOMVERSION = '1.1.0-alpha2'
+
+    GSON = '2.8.2'
 
     leakcanary = '1.5.4'
     robolectric = '3.5.1'
@@ -64,9 +81,9 @@ ext {
 }
 
 dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
@@ -78,41 +95,55 @@ dependencies {
 
     compile "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 
+    compile 'com.google.android.gms:play-services-maps:11.2.0'
+    compile 'com.google.android.gms:play-services-location:11.2.0'
 
     compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
     annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
 
+/*
 
     compile "com.trello.rxlifecycle2:rxlifecycle:$RXLIFECYCLE"
     compile "com.trello.rxlifecycle2:rxlifecycle-android:$RXLIFECYCLE"
     compile "com.trello.rxlifecycle2:rxlifecycle-components:$RXLIFECYCLE"
     compile "com.tbruyelle.rxpermissions2:rxpermissions:$RXPERMISSIONS"
+*/
 
 
     compile "android.arch.persistence.room:runtime:$ROOMVERSION"
     annotationProcessor "android.arch.persistence.room:compiler:$ROOMVERSION"
 
+    compile "com.google.code.gson:gson:$GSON"
+
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
     // DAGGER
+/*
     def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
     compile "com.google.dagger:dagger:$DAGGER_VERSION"
     provided 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
     annotationProcessor daggerCompiler
     testAnnotationProcessor daggerCompiler
     androidTestAnnotationProcessor daggerCompiler
+*/
 
-    compile 'com.github.faruktoptas:FancyShowCaseView:1.0.0'
 
 
-    compile 'com.mikepenz:iconics-core:2.9.3@aar'
+
+
+
     compile('com.mikepenz:aboutlibraries:5.9.8@aar') {
         transitive = true
     }
-    compile 'com.mikepenz:fastadapter:2.6.3@aar'
 
-    testCompile 'junit:junit:4.12'
 
-    compile 'com.github.lzyzsd:circleprogress:1.2.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true;
     }
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    compile 'com.github.faruktoptas:FancyShowCaseView:1.0.0'
+    compile 'com.mikepenz:iconics-core:2.9.3@aar'
+    compile 'com.mikepenz:fastadapter:2.6.3@aar'
+    compile 'com.github.lzyzsd:circleprogress:1.2.1'
+    testCompile 'junit:junit:4.12'
 }

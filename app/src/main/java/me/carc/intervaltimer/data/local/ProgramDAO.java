@@ -20,18 +20,18 @@ package me.carc.intervaltimer.data.local;
 
 import java.util.List;
 
-import me.carc.intervaltimer.model.WorkoutGroup;
-import me.carc.intervaltimer.model.WorkoutItem;
-import me.carc.intervaltimer.model.WorkoutMetaData;
+import me.carc.intervaltimer.model.program.WorkoutProgram;
+import me.carc.intervaltimer.model.program.WorkoutItem;
+import me.carc.intervaltimer.model.program.WorkoutMetaData;
 
 public interface ProgramDAO {
 	List<WorkoutMetaData> getProgramList();
 
-	WorkoutGroup getProgram(long programId, boolean skipCache);
+	WorkoutProgram getProgram(long programId, boolean skipCache);
 
 	void replaceProgramNode(WorkoutMetaData program, WorkoutItem programNode);
 
-	long saveProgram(WorkoutGroup program);
+	long saveProgram(WorkoutProgram program);
 	
 	void deleteProgram(long programId);
 }

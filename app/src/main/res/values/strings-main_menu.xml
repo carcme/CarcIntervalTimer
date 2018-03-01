@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="timer">Interval Timer</string>
+    <string name="timer_desc">A basic interval timer</string>
+    <string name="timer_extra"><![CDATA[
+<p>Dont\'t know what to put here yet</p>
+]]></string>
+
+    <string name="fitness">HIIT Exercises</string>
+    <string name="fitness_desc">A list of exercises</string>
+    <string name="fitness_extra"><![CDATA[
+<p>Dont\'t know what to put here yet</p>
+]]></string>
+
+
+    <string name="history">Workout History</string>
+    <string name="history_desc">View your workout history</string>
+    <string name="history_extra"><![CDATA[
+<p>Dont\'t know what to put here yet</p>
+]]></string>
+
+
+
+
+
+</resources>

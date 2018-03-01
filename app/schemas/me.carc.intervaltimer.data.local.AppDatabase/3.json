@@ -1,0 +1,77 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "89b2c0999b20287eb8d6217fe167b218",
+    "entities": [
+      {
+        "tableName": "HistoryItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`keyID` INTEGER PRIMARY KEY AUTOINCREMENT, `date` TEXT, `title` TEXT, `timeRemaining` TEXT, `elaspedTime` TEXT, `roundsCompleted` INTEGER, `roundsTotal` INTEGER, `workTime` TEXT, `restTime` TEXT, `locked` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "keyID",
+            "columnName": "keyID",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "timeRemaining",
+            "columnName": "timeRemaining",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "elaspedTime",
+            "columnName": "elaspedTime",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "roundsCompleted",
+            "columnName": "roundsCompleted",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "roundsTotal",
+            "columnName": "roundsTotal",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "workTime",
+            "columnName": "workTime",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "restTime",
+            "columnName": "restTime",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "locked",
+            "columnName": "locked",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "keyID"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"89b2c0999b20287eb8d6217fe167b218\")"
+    ]
+  }
+}

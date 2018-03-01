@@ -32,7 +32,6 @@
                     android:id="@+id/aboutApp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_standard"
                     android:layout_marginStart="@dimen/margin_standard"
                     tools:text="B-Town 0.0.1"/>
 
@@ -40,7 +39,6 @@
                     android:id="@+id/aboutTopTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_standard"
                     android:layout_marginStart="@dimen/margin_standard"
                     android:text="@string/about_top"
                     />
@@ -55,7 +53,8 @@
             android:clickable="true"
             android:linksClickable="true"
             android:padding="10dp"
-            android:text="@string/about" />
+            android:text="@string/about"
+            android:focusable="true"/>
 
         <TableLayout
             android:layout_width="wrap_content"

@@ -6,12 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.graphics.Color;
-import android.media.AudioAttributes;
-import android.net.Uri;
 import android.os.Build;
-
-import me.carc.intervaltimer.R;
 
 /**
  * Notification service for Android.O
@@ -23,27 +18,18 @@ public class NotificationUtils extends ContextWrapper {
 
     private NotificationManager mManager;
     public static final String ANDROID_CHANNEL_ID = "me.carc.intervaltimer.ALARM";
-    public static final String ANDROID_CHANNEL_NAME = "ALARM CHANNEL";
+    public static final String ANDROID_CHANNEL_NAME = "Workout Channel";
 
-    public NotificationUtils(Context base) {
-        super(base);
+    public NotificationUtils(Context context) {
+        super(context);
         createChannels();
     }
 
     public void createChannels() {
-
-        NotificationChannel androidChannel = new NotificationChannel(ANDROID_CHANNEL_ID, ANDROID_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
-        androidChannel.enableLights(true);
-        androidChannel.enableVibration(true);
-        androidChannel.setLightColor(Color.GREEN);
-        androidChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-
-        Uri resourceURI = Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.request_alarm);
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                .build();
-        androidChannel.setSound(resourceURI, audioAttributes);
+        NotificationChannel androidChannel = new NotificationChannel(ANDROID_CHANNEL_ID, ANDROID_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+        androidChannel.enableLights(false);
+        androidChannel.enableVibration(false);
+        androidChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
         getManager().createNotificationChannel(androidChannel);
     }

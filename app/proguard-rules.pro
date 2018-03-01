@@ -8,3 +8,10 @@
 
 -keep class javax.annotation.** { *; }
 -dontwarn javax.annotation.**
+
+
+# Crashlytics
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
+

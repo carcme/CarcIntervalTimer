@@ -13,6 +13,15 @@
             android:summaryOn="@string/prep_time_summary"
             android:title="@string/prep_time_title"/>
 
+
+        <ListPreference
+            android:defaultValue="10000"
+            android:entries="@array/sprint_time"
+            android:entryValues="@array/sprint_time_value"
+            android:key="sprints_time_key"
+            android:summary="@string/sprint_time_summary"
+            android:title="@string/sprints_title"/>
+<!--
         <me.carc.intervaltimer.widgets.PickerPrefDialog
             android:defaultValue="@string/default_work_time_value"
             android:key="round_time_key"
@@ -22,6 +31,7 @@
             android:defaultValue="@string/default_rest_time_value"
             android:key="rest_time_key"
             android:title="@string/rest_time_title"/>
+-->
 
         <ListPreference
             android:defaultValue="3"
@@ -31,31 +41,43 @@
             android:summary="@string/warn_time_summary"
             android:title="@string/warn_time_title"/>
 
+<!--
         <EditTextPreference
             android:defaultValue="9"
             android:key="number_rounds_key"
             android:numeric="integer"
             android:summary="@string/num_round_summary"
             android:title="@string/num_round_title"/>
+-->
+
+<!--
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="history_key"
+            android:summaryOff="@string/history_summary_disabled"
+            android:summaryOn="@string/history_summary"
+            android:title="@string/history_title"/>
+-->
 
         <CheckBoxPreference
             android:defaultValue="true"
+            android:key="show_summary_key"
+            android:summaryOff="@string/summary_disabled"
+            android:summaryOn="@string/summary"
+            android:title="@string/summary_title"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="quotes_key"
             android:summaryOff="@string/quotes_summary_disabled"
             android:summaryOn="@string/quotes_summary"
             android:title="@string/quotes_title"/>
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="history_key"
-            android:summaryOff="@string/history_summary_disabled"
-            android:summaryOn="@string/history_summary"
-            android:title="@string/history_title"/>
-
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Phone Settings">
+        android:title="Power Consumption">
+
 
         <CheckBoxPreference
             android:defaultValue="true"
@@ -64,12 +86,55 @@
             android:summaryOn="@string/keep_awake_summary"
             android:title="@string/keep_awake_title"/>
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="proximity_sensor_key"
-            android:summaryOff="@string/proximity_sensor_summary_disabled"
-            android:summaryOn="@string/proximity_sensor_summary"
-            android:title="@string/proximity_sensor_title"/>
+        <PreferenceScreen
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:key="pref_screen_gps"
+            android:title="Location Settings">
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="enable_location_logging"
+                android:summaryOff="Routes are not recorded"
+                android:summaryOn="Record run routes and distances"
+                android:title="Enable Location Services"/>
+<!--
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="gps_enable"
+                android:summaryOff="Updates will be less accurate"
+                android:summaryOn="Updates will be more accurate"
+                android:title="Enable GPS"/>
+-->
+            <ListPreference
+                android:defaultValue="10"
+                android:entries="@array/gps_distance"
+                android:entryValues="@array/gps_distance_value"
+                android:key="gps_min_dist_key"
+                android:summary="@string/gps_dist_summary"
+                android:title="@string/gps_dist_title"/>
+
+            <ListPreference
+                android:defaultValue="5000"
+                android:entries="@array/gps_time"
+                android:entryValues="@array/gps_time_value"
+                android:key="gps_min_time_key"
+                android:summary="@string/gps_time_summary"
+                android:title="@string/gps_time_title"/>
+
+            <PreferenceCategory
+                android:title="Time &amp; Distance Usage">
+                <Preference
+                    android:key="ignore"
+                    android:summary="Use the time and distance parameters to regulate the power consumption of the GPS updates"
+                    android:title="Usage"/>
+            </PreferenceCategory>
+
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Phone Settings">
 
         <CheckBoxPreference
             android:defaultValue="true"
@@ -85,12 +150,21 @@
             android:summaryOn="@string/voice_summary_on"
             android:title="@string/voice_title"/>
 
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="use_vibrate_key"
             android:summaryOff="@string/use_vibrate_summary_disabled"
             android:summaryOn="@string/use_vibrate_summary"
             android:title="@string/use_vibrate_title"/>
+
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="proximity_sensor_key"
+            android:summaryOff="@string/proximity_sensor_summary_disabled"
+            android:summaryOn="@string/proximity_sensor_summary"
+            android:title="@string/proximity_sensor_title"/>
 
     </PreferenceCategory>
 

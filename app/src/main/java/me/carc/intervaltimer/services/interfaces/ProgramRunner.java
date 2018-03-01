@@ -1,8 +1,8 @@
 package me.carc.intervaltimer.services.interfaces;
 
-import me.carc.intervaltimer.model.Exercise;
-import me.carc.intervaltimer.model.WorkoutGroup;
-import me.carc.intervaltimer.model.WorkoutItem;
+import me.carc.intervaltimer.model.program.Exercise;
+import me.carc.intervaltimer.model.program.WorkoutProgram;
+import me.carc.intervaltimer.model.program.WorkoutItem;
 
 public interface ProgramRunner {
 	public static final int TICK_RATE = 1000;
@@ -31,5 +31,5 @@ public interface ProgramRunner {
 
 	WorkoutItem getCurrentNode();
 
-	WorkoutGroup getProgram();
+	WorkoutProgram getProgram();
 }

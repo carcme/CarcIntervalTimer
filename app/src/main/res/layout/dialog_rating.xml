@@ -79,7 +79,8 @@
             android:textColorHint="@color/md_grey_400"
             android:visibility="gone"
             tools:text="some random text"
-            tools:visibility="visible"/>
+            tools:visibility="visible"
+            tools:ignore="LabelFor"/>
 
         <LinearLayout
             android:id="@+id/dialog_rating_feedback_buttons"
@@ -102,7 +103,8 @@
                 android:padding="15dp"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                tools:text="feedback cancel"/>
+                tools:text="feedback cancel"
+                android:focusable="true"/>
 
             <TextView
                 android:id="@+id/dialog_rating_button_feedback_submit"
@@ -115,7 +117,8 @@
                 android:padding="15dp"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                tools:text="feedback submit"/>
+                tools:text="feedback submit"
+                android:focusable="true"/>
 
         </LinearLayout>
 
@@ -138,7 +141,8 @@
                 android:padding="15dp"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                tools:text="rate Neg"/>
+                tools:text="rate Neg"
+                android:focusable="true"/>
 
             <TextView
                 android:id="@+id/dialog_rating_button_positive"
@@ -151,7 +155,8 @@
                 android:padding="15dp"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                tools:text="rate Pos"/>
+                tools:text="rate Pos"
+                android:focusable="true"/>
 
         </LinearLayout>
 

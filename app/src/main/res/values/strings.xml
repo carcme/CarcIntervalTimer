@@ -1,7 +1,11 @@
 <resources>
-    <string name="app_name">Carc Interval Timer</string>
+    <string name="app_name">xIT Timer</string>
+    <string name="app_name_share">Share xIT Timer - Interval Training Timer</string>
+    <string name="app_name_desc">Simple and easy Interval Timer for HIIT, SIT, Running, Boxing, MMA, Tabata, Cardio &amp; more</string>
+
+
     <string name="app_settings_name">Settings</string>
-    
+
 
     <string name="time_set">Set time</string>
     <string name="time">Time : </string>
@@ -15,7 +19,18 @@
 
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
+
+    <string name="sprints_title">Sprints Duration</string>
+    <string name="sprints_summary_off">Timer continues as normal</string>
+    <string name="sprints_summary_on">Sprint %s before the end of the round</string>
+    <string name="sprint_time_summary">Sprint %s before the end of the round</string>
+
+
+
     <string name="round_time_title">Exercise Duration</string>
+
+    <string name="step_sensitivity">Step Sensitivity</string>
+    <string name="step_settings">Sensitivity: %d</string>
     <string name="rest_time_title">Rest Duration</string>
     <string name="keep_awake_title">Keep Awake</string>
     <string name="num_round_title">Number of Sets</string>
@@ -32,6 +47,13 @@
     <string name="warn_time_title">Warning Time</string>
     <string name="warn_time_summary">Alert sound %s before round finishes</string>
     <string name="warn_time_no_warning">No Warnings</string>
+
+    <string name="gps_dist_title">Distance Update</string>
+    <string name="gps_dist_summary">Updates when you\'ve move at least %s</string>
+
+    <string name="gps_time_title">Time Update</string>
+    <string name="gps_time_summary">Updates occur at least every %s</string>
+
 
     <string name="stop_toast">Please stop timer first</string>
     <string name="prep_time_title">Preparation Time</string>
@@ -57,6 +79,10 @@
     <string name="history_summary">Workout history is shown on the main screen</string>
     <string name="history_summary_disabled">No workout history is shown</string>
 
+    <string name="summary_title">Show Summary</string>
+    <string name="summary">Summary is shown on the main screen</string>
+    <string name="summary_disabled">No summary is shown</string>
+
     <string name="workDefaultMsg">Work It</string>
     <string name="restDefaultMsg">Rest</string>
     <string name="prepDefaultMsg">Get Ready</string>
@@ -71,7 +97,6 @@
     <string name="shared_string_rate">Rate</string>
     <string name="shared_string_settings">Settings</string>
     <string name="shared_string_share">Share</string>
-
 
 
     <string name="appTitleBtown">B-Town | Berlin Tours and Maps</string>
@@ -99,21 +124,24 @@
     <string name="workout_viewer_summary">This is a break down of your workout</string>
 
 
-
-    <!--FEEDBACK DIALOG-->
-    <string name="rating_dialog_experience">How was your experience with us?</string>
+    <!--RATING and FEEDBACK DIALOG-->
+    <string name="rating_dialog_experience">Ratings really matter… could you leave some stars?</string>
     <string name="rating_dialog_maybe_later">Maybe later</string>
     <string name="rating_dialog_never">Never</string>
     <string name="rating_dialog_feedback_title">Feedback</string>
     <string name="rating_dialog_submit">Submit</string>
     <string name="rating_dialog_cancel">Cancel</string>
-    <string name="rating_dialog_suggestions">Suggest what you want and we\'ll work on it!</string>
+    <string name="rating_dialog_suggestions">Let me know what you\'d like to see and I\'ll work on it!</string>
 
-    <string name="ratings_request_title">Love to know what you think of the app</string>
+    <string name="ratings_request_title">Love to know what you think of xIT Timer</string>
     <string name="feedback_request_title">Send Feedback</string>
     <string name="feedback_request_hint">Tell us where I can improve&#8230; or some features you\'d like to see</string>
     <string name="feedbackChooserTitle">Send Feedback Via</string>
     <string name="add_your_comment">Add comment</string>
+
+    <string name="feedback_request_send">Send</string>
+    <string name="feedback_request_cancel">Cancel</string>
+
 
     <string name="shared_string_send">Send</string>
     <string name="shared_string_thankyou">Thank you!</string>
@@ -129,6 +157,25 @@
     <string name="effort_rest">Rest</string>
     <string name="effort_none">n/a</string>
     <string name="lock_the_entry_in_the_database">Lock the entry in the database</string>
+
+
+    <string name="front_menu_run_title">Running Intervals</string>
+    <string name="front_menu_run_desc">Simple intervals for Running, Jogging or Sprints</string>
+
+    <string name="front_menu_cardio_title">Cardio</string>
+    <string name="front_menu_cardio_desc">Tabata and Cardio</string>
+    <string name="spinner_no_default_hint">No Title</string>
+    <string name="title_activity_google_maps">Map</string>
+    <string name="steps_count">Steps: %d</string>
+    <string name="time_empty">00:00:00</string>
+    <string name="distance_demo">5km</string>
+    <string name="time_demo">00:28:47</string>
+    <string name="workout_title_hint">Add your title</string>
+    <string name="map">Map</string>
+    <string name="apply">Apply</string>
+    <string name="empty_history_list_text">Your workout history will appear here</string>
+
+    <string name="history_dialog_title">History</string>
 
 
 </resources>

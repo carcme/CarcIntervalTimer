@@ -40,7 +40,8 @@
             android:padding="10dp"
             android:textColorHint="@color/md_grey_400"
             android:textColor="@color/black"
-            tools:hint="Tell us where we can improve..." />
+            tools:hint="Tell us where we can improve..."
+            tools:ignore="LabelFor"/>
 
         <LinearLayout
             android:id="@+id/dlg_feedback_buttons"
@@ -65,7 +66,8 @@
                 android:textSize="15sp"
                 tools:background="@color/negativeBtnBgColor"
                 tools:text="@android:string/cancel"
-                tools:textColor="@color/negativeBtnTextColor" />
+                tools:textColor="@color/negativeBtnTextColor"
+                android:focusable="true"/>
 
             <android.support.v4.widget.Space
                 android:layout_width="10dp"
@@ -83,7 +85,8 @@
                 android:textSize="15sp"
                 tools:background="@color/positiveBtnBgColor"
                 tools:text="@string/shared_string_send"
-                tools:textColor="@color/positiveBtnTextColor" />
+                tools:textColor="@color/positiveBtnTextColor"
+                android:focusable="true"/>
 
         </LinearLayout>
 

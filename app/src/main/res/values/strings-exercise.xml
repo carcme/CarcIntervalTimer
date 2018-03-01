@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="burpee">Burpee</string>
+    <string name="burpee_desc">A full body exercise used in strength training and as an aerobic exercise</string>
+    <string name="burpee_instruction"><![CDATA[
+<p>Stand with your feet shoulder-width apart, weight in your heels, and your arms at your sides</p>
+<p>Push your hips back, bend your knees, and lower your body into a squat</p>
+<p>Place your hands on the floor directly in front of, and just inside, your feet. Shift your weight onto them</p>
+<p>Jump your feet back to softly land on the balls of your feet in a plank position. Your body should form a straight line from your head to heels. Be careful not to let your back sag or you butt stick up in the air, as both can keep you from effectively working your core</p>
+<p>Jump your feet back so that they land just outside of your hands</p>
+<p>Reach your arms over head and explosively jump up into the air</p>
+<p>Land and immediately lower back into a squat for your next rep</p>
+]]></string>
+    <string name="burpee_url">https://media.giphy.com/media/lEYcevSwZ55Go/giphy.gif</string>
+
+    <string name="jacks">Jumping Jacks</string>
+    <string name="jacksDesc">Hip, shoulders, knee and ankle exercise</string>
+    <string name="jacksInstruction"><![CDATA[
+<p>Stand with feet together, knees slightly bent, and arms to sides</p>
+<p>Jump while raising arms and separating legs to sides. Land on forefoot with legs apart and arms overhead</p>
+<p>Jump again while lower arms and returning legs to midline. Land on forefoot with arms and legs in original position and repeat</p>
+]]></string>
+    <string name="jacksUrl"></string>
+
+    <string name="planks">Planks</string>
+    <string name="planksDesc">One of the best exercises for building core strength and endurance
+    </string>
+    <string name="planksInstruction"><![CDATA[
+<p>Plant the hands directly under the shoulders (slightly wider than shoulder-width apart) like you’re about to do a push-up</p>
+<p>Ground the toes into the floor and squeeze the glutes to stabilize the body. Your legs should be working in the move too; careful not to lock or hyperextend your knees</p>
+<p>Neutralize the neck and spine by looking at a spot on the floor about 30cm beyond the hands. Your head should be in line with your back</p>
+<p>Hold the position for as long as possible without compromising form or breath</p>
+]]></string>
+    <string name="planksUrl"></string>
+
+    <string name="situps">Situps</string>
+    <string name="situpsDesc">A full body exercise used in strength training and as an aerobic exercise</string>
+    <string name="situpsInstruction"><![CDATA[
+<p>Lie on your back on an exercise mat. Bend your knees and plant your feet about hip-distance apart. Place your hands on the back of your head, where it attaches to your neck. Point your elbows to the sides of the room</p>
+<p>Exhale and pull your belly button in toward your spine as you gently raise your torso by bending your hips and waist. Lift up until your torso is just inches from your thighs</p>
+<p>Inhale and control your return to the start position to complete one repetition</p>
+]]></string>
+    <string name="situpsUrl"></string>
+
+    <string name="dips">Tricep Dips</string>
+    <string name="dipsDesc">A basic body-weight exercise</string>
+    <string name="dipsInstruction"><![CDATA[
+<p>Position your hands shoulder-width apart on a bench, fallen log or anything slightly elevated</p>
+<p>Slide your butt off the front of the bench with your legs extended out in front of you</p>
+<p>Straighten your arms, keeping a little bend in your elbows to keep tension on your triceps and off your elbow joints</p>
+<p>Slowly bend your elbows to lower your body toward the floor until your elbows are at about a 90-degree angle. Be sure to keep your back close to the bench</p>
+<p>Once you reach the bottom of the movement, press down into the bench to straighten your elbows, returning to the starting position. This completes one rep</p>
+<p>Keep your shoulders down as you lower and raise your body. You can bend your legs to modify this exercise</p>
+]]></string>
+    <string name="dipsUrl"></string>
+
+
+    <string name="pushup">Pushup</string>
+    <string name="pushupDesc">A full body exercise used in strength training and as an aerobic exercise</string>
+    <string name="pushupInstruction"><![CDATA[
+<p>Position your body with your arms straight out, abs tight, holding your body in a plank position</p>
+<p>Hands and arms should be positioned slightly below your shoulders, fingers pointed forwards. Shoulders are pushed down away from your ears</p>
+<p>Lower your body until your chest is an inch or two above the floor, elbows pulling back at roughly a 45 degree angle</p>
+<p>Push your torso away from the ground until your arms lock, then repeat</p>
+]]></string>
+    <string name="pushupUrl">https://d5kh2btv85w9n.cloudfront.net/b/b7/Do%20a%20Push%20Up%20Step%204%20Version%205.360p.mp4</string>
+
+
+</resources>
