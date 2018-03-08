@@ -2,7 +2,7 @@
 
 An Interval Timer suitable for HIIT, MMA, Boxing, Tabata or any form of workout that utilises intervals.
 
-App is on the [Play Store](https://play.google.com/store/apps/details?id=me.carc.intervaltimer). 
+App is on the [Play Store](https://play.google.com/store/apps/details?id=me.carc.carcintervaltimer). 
 
 [Home Page](https://carcmedev.github.io). TODO: BUILD THE LANDING PAGE
 
